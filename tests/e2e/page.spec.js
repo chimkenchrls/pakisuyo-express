@@ -13,11 +13,11 @@ test.describe('page', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
-  test('lists the featured restaurants', async ({ page }) => {
+  test('shows exactly the 5 featured stores', async ({ page }) => {
     await page.goto('/');
     const cards = page.locator('#restaurants .store-card');
-    await expect(cards).toHaveCount(7);
-    await expect(cards.first()).toContainText('Jollibee Sariaya');
+    await expect(cards).toHaveCount(5);
+    await expect(cards).toContainText(['Jollibee Sariaya', "McDonald's Sariaya", "Dunkin' Sariaya", 'Wings & Dims Corner', 'Dash Espresso']);
   });
 
   test('mobile menu opens and closes', async ({ page }) => {

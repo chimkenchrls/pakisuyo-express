@@ -1,7 +1,7 @@
 import { CATEGORIES, PROMO, getStore } from '../data/stores.js';
 import { PAYMENT_METHODS } from '../data/payments.js';
 import { itemCount, totals, peso } from '../lib/cart.js';
-import { storeLogoHtml, itemImageHtml } from '../lib/images.js';
+import { storeImageHtml, itemImageHtml } from '../lib/images.js';
 import { logoStacked } from '../brand/logo.js';
 import { escapeHtml } from '../lib/html.js';
 import { visibleStores, isTrackingDone, TRACKING_STEPS, DEMO_STORE_ID } from './state.js';
@@ -22,7 +22,7 @@ const splash = () => `
 const storeRow = (s) => `
   <li>
     <button type="button" class="ds-store" data-action="OPEN_STORE" data-store-id="${s.id}">
-      ${storeLogoHtml(s, 'ds-row-logo')}
+      ${storeImageHtml(s, 'ds-row-logo')}
       <span><b>${escapeHtml(s.name)}</b>
         <span class="ds-meta">${escapeHtml(s.categoryLabel)} · ${s.eta} · <span class="ds-open">Open</span></span></span>
     </button>
@@ -71,7 +71,7 @@ function storeScreen(state) {
   return `
     <div class="ds ds--store">
       <button type="button" class="ds-back" data-action="BACK" aria-label="Back">←</button>
-      <div class="ds-store-hero" style="background:${store.color}">${storeLogoHtml(store, 'ds-store-logo')}</div>
+      <div class="ds-store-hero" style="background:${store.color}">${storeImageHtml(store, 'ds-store-logo')}</div>
       <div class="ds-pad">
         <h3 class="ds-h">${escapeHtml(store.name)}</h3>
         <p class="ds-muted">${store.menu.length ? 'Sample menu · prices for demo only' : `${escapeHtml(store.categoryLabel)} · ${store.eta}`}</p>

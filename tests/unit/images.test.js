@@ -4,26 +4,33 @@ vi.mock('../../src/data/images.json', () => ({
   default: { stores: { 'jollibee-sariaya': '/assets/stores/jollibee-sariaya/logo.png' }, items: { yumburger: '/assets/y.png' } },
 }));
 
-const { initialsTile, storeLogoHtml, itemImageHtml } = await import('../../src/lib/images.js');
+const { initialsTile, storeImageHtml, itemImageHtml, categoryTile } = await import('../../src/lib/images.js');
 const { getStore } = await import('../../src/data/stores.js');
 
 describe('images', () => {
   it('initials tile uses the store colours and hides from screen readers', () => {
-    const html = initialsTile(getStore('bukid-amyr'), 'x');
+    const html = initialsTile({ initials: 'BA', color: '#3E7B27', textColor: '#FFFFFF' }, 'x');
     expect(html).toContain('>BA<');
     expect(html).toContain('background:#3E7B27');
     expect(html).toContain('aria-hidden="true"');
   });
 
-  it('uses the manifest logo with an initials fallback attached', () => {
-    const html = storeLogoHtml(getStore('jollibee-sariaya'), 'logo');
+  it('uses the manifest logo with a fallback attached', () => {
+    const html = storeImageHtml(getStore('jollibee-sariaya'), 'logo');
     expect(html).toContain('src="/assets/stores/jollibee-sariaya/logo.png"');
     expect(html).toContain('alt="Jollibee Sariaya logo"');
     expect(html).toContain('data-fallback="&lt;span');
   });
 
-  it('falls back to initials when no logo exists', () => {
-    expect(storeLogoHtml(getStore('mcdonalds-sariaya'), 'logo')).toContain('>MC<');
+  it('falls back to initials for featured stores without a logo', () => {
+    expect(storeImageHtml(getStore('mcdonalds-sariaya'), 'logo')).toContain('>MC<');
+  });
+
+  it('gives directory stores a category icon tile', () => {
+    const html = storeImageHtml({ id: 'osm-n1', name: 'Libra Bakery', category: 'bakery', town: 'Lucena' }, 'row');
+    expect(html).toContain('🥖');
+    expect(html).toContain('background:#F3EBDD');
+    expect(categoryTile('unknown', 'x')).toContain('🍴');
   });
 
   it('menu items use the manifest photo or an emoji tile', () => {

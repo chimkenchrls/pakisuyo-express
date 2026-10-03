@@ -1,5 +1,6 @@
 import manifest from '../data/images.json';
 import { escapeHtml } from './html.js';
+import { categoryById } from '../data/categories.js';
 
 export function initialsTile(store, cls) {
   return `<span class="${cls} tile" style="background:${store.color};color:${store.textColor}" aria-hidden="true">${escapeHtml(store.initials)}</span>`;
@@ -10,10 +11,16 @@ const emojiTile = (emoji, cls) => `<span class="${cls} tile" aria-hidden="true">
 const imgWithFallback = (src, alt, cls, fallback) =>
   `<img class="${cls}" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" data-fallback="${escapeHtml(fallback)}">`;
 
-export function storeLogoHtml(store, cls = 'store-logo') {
-  const tile = initialsTile(store, cls);
+export function categoryTile(categoryId, cls) {
+  const c = categoryById(categoryId);
+  return `<span class="${cls} tile" style="background:${c?.tile ?? '#F6F6F6'}" aria-hidden="true">${c?.icon ?? '🍴'}</span>`;
+}
+
+// The only place that decides a store's picture (spec §6.4). Google Places photos would plug in here.
+export function storeImageHtml(store, cls = 'store-logo') {
+  const fallback = store.initials ? initialsTile(store, cls) : categoryTile(store.category, cls);
   const src = manifest.stores?.[store.id];
-  return src ? imgWithFallback(src, `${store.name} logo`, cls, tile) : tile;
+  return src ? imgWithFallback(src, `${store.name} logo`, cls, fallback) : fallback;
 }
 
 export function itemImageHtml(item, cls = 'item-img') {

@@ -13,7 +13,8 @@ const TARGETS = [
   { kind: 'stores', id: 'jollibee-sariaya', file: 'stores/jollibee-sariaya/logo', title: 'File:Jollibee 2011 wordmark.svg' },
   { kind: 'stores', id: 'mcdonalds-sariaya', file: 'stores/mcdonalds-sariaya/logo', title: "File:McDonald's Golden Arches.svg" },
   { kind: 'stores', id: 'dunkin-sariaya', file: 'stores/dunkin-sariaya/logo', title: "File:Dunkin' logo.svg" },
-  { kind: 'stores', id: 'max-mango', file: 'stores/max-mango/logo', search: null },
+  { kind: 'stores', id: 'wings-dims-sariaya', file: 'stores/wings-dims-sariaya/logo' },
+  { kind: 'stores', id: 'dash-espresso-sariaya', file: 'stores/dash-espresso-sariaya/logo' },
   { kind: 'items', id: 'chickenjoy-rice', file: 'stores/jollibee-sariaya/items/chickenjoy-rice', title: 'File:Jollibee Chickenjoy with Palabok.jpg' },
   { kind: 'items', id: 'jolly-spaghetti', file: 'stores/jollibee-sariaya/items/jolly-spaghetti', title: 'File:Jollibee noodle dishes open.jpg' },
   { kind: 'items', id: 'yumburger', file: 'stores/jollibee-sariaya/items/yumburger', search: null },
@@ -22,6 +23,10 @@ const TARGETS = [
 
 const exists = (url) => access(url).then(() => true, () => false);
 const stripHtml = (s = '') => s.replace(/<[^>]*>/g, '').trim();
+async function findOwnFile(file) {
+  for (const ext of ['png', 'jpg', 'jpeg', 'webp']) if (await exists(new URL(`${file}.${ext}`, ROOT))) return ext;
+  return null;
+}
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function findOnCommons({ title, search }) {
@@ -43,14 +48,16 @@ const manifest = { stores: {}, items: {} };
 const credits = [];
 
 for (const t of TARGETS) {
-  const own = new URL(`${t.file}.png`, ROOT);
-  if (await exists(own)) {
-    manifest[t.kind][t.id] = `/assets/${t.file}.png`;
-    credits.push(`- \`${t.file}.png\` — supplied by the project owner`);
-    console.log(`✓ ${t.id}: using owner-supplied file`);
+  // A target with neither `title` nor `search` is owner-supplied.
+  if (!t.title && !t.search) {
+    const ownExt = await findOwnFile(t.file);
+    if (ownExt) {
+      manifest[t.kind][t.id] = `/assets/${t.file}.${ownExt}`;
+      credits.push(`- \`${t.file}.${ownExt}\` — supplied by the project owner (private pitch only)`);
+      console.log(`✓ ${t.id}: using owner-supplied file`);
+    }
     continue;
   }
-  if (!t.title && !t.search) continue;
 
   const hit = await findOnCommons(t);
   if (!hit) {

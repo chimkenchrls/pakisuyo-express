@@ -3,7 +3,7 @@ import { emptyCart, addItem, removeItem, itemCount, totals, peso } from '../../s
 import { getStore } from '../../src/data/stores.js';
 
 const jollibee = getStore('jollibee-sariaya');
-const contis = getStore('contis'); // out of town
+const outOfTown = { ...getStore('jollibee-sariaya'), id: 'fixture-lucena', town: 'Lucena' };
 const [chickenjoy, , , cokeFloat] = jollibee.menu;
 
 describe('cart', () => {
@@ -53,7 +53,7 @@ describe('totals', () => {
   });
 
   it('does not invent a fee for out-of-town stores, and ignores the promo', () => {
-    expect(totals(cart, contis, { promoApplied: true })).toEqual({
+    expect(totals(cart, outOfTown, { promoApplied: true })).toEqual({
       subtotal: 158, fee: 0, feeKnown: false, discount: 0, total: 158,
       feeLabel: 'Out-of-town fee — confirmed by our team', totalLabel: 'Total (excl. delivery)',
     });

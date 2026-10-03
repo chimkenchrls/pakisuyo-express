@@ -1,6 +1,6 @@
 import { STORES } from '../data/stores.js';
 import { SELECT_STORE_EVENT } from '../data/contact.js';
-import { storeLogoHtml } from '../lib/images.js';
+import { storeImageHtml } from '../lib/images.js';
 import { escapeHtml } from '../lib/html.js';
 
 export function renderRestaurants(el) {
@@ -13,7 +13,7 @@ export function renderRestaurants(el) {
         ${STORES.map((s) => `
           <li>
             <button type="button" class="store-card" data-store-id="${s.id}">
-              ${storeLogoHtml(s, 'store-card__logo')}
+              ${storeImageHtml(s, 'store-card__logo')}
               <span class="store-card__name">${escapeHtml(s.name)}</span>
               <span class="store-card__meta">${escapeHtml(s.categoryLabel)} · ${escapeHtml(s.town)}</span>
             </button>

@@ -1,3 +1,5 @@
+import { DIRECTORY_CATEGORIES } from './categories.js';
+
 export const HOME_TOWN = 'Sariaya';
 export const SARIAYA_DELIVERY_FEE = 50;
 export const PROMO = { code: 'PAKISUYO10', discount: 10 };
@@ -8,16 +10,9 @@ export const COVERAGE = {
   deliveryArea: 'Sariaya',
 };
 
-export const CATEGORIES = [
-  { id: 'all', label: 'All' },
-  { id: 'fast-food', label: 'Fast food' },
-  { id: 'drinks', label: 'Coffee & drinks' },
-  { id: 'cakes', label: 'Cakes' },
-  { id: 'filipino', label: 'Filipino' },
-];
+export const CATEGORIES = [{ id: 'all', label: 'All' }, ...DIRECTORY_CATEGORIES.map(({ id, label }) => ({ id, label }))];
 
-// Towns marked "unverified" are guesses from their Facebook posts — confirm with the owner.
-// Menu prices are samples for the demo only.
+// The 5 featured stores, in display order. Menu prices are samples for the demo only.
 export const STORES = [
   {
     id: 'jollibee-sariaya', name: 'Jollibee Sariaya', category: 'fast-food', categoryLabel: 'Fast food',
@@ -34,24 +29,16 @@ export const STORES = [
     town: 'Sariaya', eta: '20–30 min', initials: 'MC', color: '#DA291C', textColor: '#FFC72C', emoji: '🍟', menu: [],
   },
   {
-    id: 'dunkin-sariaya', name: "Dunkin' Sariaya", category: 'drinks', categoryLabel: 'Donuts & coffee',
+    id: 'dunkin-sariaya', name: "Dunkin' Sariaya", category: 'cafe', categoryLabel: 'Donuts & coffee',
     town: 'Sariaya', eta: '15–25 min', initials: 'DD', color: '#FF671F', textColor: '#FFFFFF', emoji: '🍩', menu: [],
   },
   {
-    id: 'max-mango', name: 'Max Mango', category: 'drinks', categoryLabel: 'Mango drinks',
-    town: 'Sariaya' /* unverified */, eta: '15–25 min', initials: 'MM', color: '#FFB000', textColor: '#141414', emoji: '🥭', menu: [],
+    id: 'wings-dims-sariaya', name: 'Wings & Dims Corner', category: 'fast-food', categoryLabel: 'Wings & dimsum',
+    town: 'Sariaya', eta: '20–30 min', initials: 'WD', color: '#E31B23', textColor: '#FFFFFF', emoji: '🍗', menu: [],
   },
   {
-    id: 'bukid-amyr', name: 'Bukid AMYR Restaurant', category: 'filipino', categoryLabel: 'Filipino',
-    town: 'Sariaya' /* unverified */, eta: '25–35 min', initials: 'BA', color: '#3E7B27', textColor: '#FFFFFF', emoji: '🍛', menu: [],
-  },
-  {
-    id: 'contis', name: "Conti's Bakeshop & Restaurant", category: 'cakes', categoryLabel: 'Cakes & meals',
-    town: 'Lucena' /* unverified */, eta: '35–50 min', initials: 'CB', color: '#6B3FA0', textColor: '#FFFFFF', emoji: '🎂', menu: [],
-  },
-  {
-    id: 'kope-right', name: 'KOPE-right', category: 'drinks', categoryLabel: 'Coffee',
-    town: 'Sariaya' /* unverified */, eta: '15–25 min', initials: 'KR', color: '#6F4E37', textColor: '#FFFFFF', emoji: '☕', menu: [],
+    id: 'dash-espresso-sariaya', name: 'Dash Espresso', category: 'cafe', categoryLabel: 'Coffee',
+    town: 'Sariaya', eta: '15–25 min', initials: 'DE', color: '#141414', textColor: '#FFFFFF', emoji: '☕', menu: [],
   },
 ];
 

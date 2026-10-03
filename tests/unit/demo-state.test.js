@@ -75,7 +75,7 @@ describe('demo reducer — button mashing (Review Focus 5)', () => {
 describe('visibleStores', () => {
   it('filters by category and by search over names and menu items', () => {
     const base = { ...initialState(), screen: 'home' };
-    expect(visibleStores({ ...base, category: 'cakes' }).map((s) => s.id)).toEqual(['contis']);
+    expect(visibleStores({ ...base, category: 'cafe' }).map((s) => s.id)).toEqual(['dunkin-sariaya', 'dash-espresso-sariaya']);
     expect(visibleStores({ ...base, query: 'spaghetti' }).map((s) => s.id)).toEqual(['jollibee-sariaya']);
     expect(visibleStores({ ...base, query: '  DUNKIN ' }).map((s) => s.id)).toEqual(['dunkin-sariaya']);
     expect(visibleStores({ ...base, query: 'zzz' })).toEqual([]);
