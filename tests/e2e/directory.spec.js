@@ -42,7 +42,7 @@ test('filters by town and type, keeps focus while typing, and orders from a row'
 
   await sheet.getByRole('button', { name: 'Order from Lugaw Queen' }).click();
   await expect(sheet).toBeHidden();
-  await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('Lugaw Queen');
+  await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('Lugaw Queen (Lucena)'); // town kept for the dispatcher
   await expect(page.getByLabel('Order List')).toBeFocused();
 });
 
@@ -93,7 +93,7 @@ test('store combobox works with the keyboard only (Review Focus 4)', async ({ pa
   await page.keyboard.press('ArrowDown');
   await expect(combo).toHaveAttribute('aria-activedescendant', /store-opt-0/);
   await page.keyboard.press('Enter'); // must pick, not submit
-  await expect(combo).toHaveValue('Lugaw Queen');
+  await expect(combo).toHaveValue('Lugaw Queen (Lucena)');
   await expect(page.getByRole('listbox')).toBeHidden();
   await expect(page.locator('#err-name')).toBeEmpty(); // form was not submitted
 
@@ -102,7 +102,28 @@ test('store combobox works with the keyboard only (Review Focus 4)', async ({ pa
   await page.getByRole('button', { name: 'Send Order' }).click();
   await popup;
   await page.bringToFront();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen (Lucena)');
+});
+
+test('picking a featured store keeps its name as is', async ({ page }) => {
+  await page.goto('/#order');
+  const combo = page.getByRole('combobox', { name: /Store/ });
+  await combo.pressSequentially('jollibee');
+  await page.getByRole('option', { name: /Jollibee Sariaya/ }).click();
+  await expect(combo).toHaveValue('Jollibee Sariaya');
+});
+
+test('store suggestions recover after a failed load (patchy data)', async ({ page }) => {
+  await page.unroute('**/data/directory.json');
+  let calls = 0;
+  await page.route('**/data/directory.json', (r) => (++calls === 1 ? r.abort() : r.fulfill({ contentType: 'application/json', body: FIXTURE })));
+  await page.goto('/#order');
+  const combo = page.getByRole('combobox', { name: /Store/ });
+  await combo.focus(); // first load fails
+  await expect.poll(() => calls).toBe(1);
+  await page.getByLabel('Landmark').focus();
+  await combo.pressSequentially('lugaw');
+  await expect(page.getByRole('option', { name: /Lugaw Queen/ })).toBeVisible();
 });
 
 test('an unlisted store can be used as typed, and Esc closes the list', async ({ page }) => {

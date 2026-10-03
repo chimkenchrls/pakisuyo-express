@@ -7,8 +7,9 @@ export const DIRECTORY_URL = '/data/directory.json';
 let cache;
 
 // Loaded on first need (spec §6.2) so the first page load stays light. A failed load is retried next time.
-export function loadDirectory({ fetchFn = globalThis.fetch } = {}) {
-  cache ??= fetchFn(DIRECTORY_URL)
+export function loadDirectory({ fetchFn = globalThis.fetch, timeoutMs = 15000 } = {}) {
+  // A stalled request (captive portal, very slow data) must end in the failure fallback, not "Loading…" forever.
+  cache ??= fetchFn(DIRECTORY_URL, { signal: AbortSignal.timeout(timeoutMs) })
     .then((res) => {
       if (!res.ok) throw new Error(`Directory failed to load (HTTP ${res.status})`);
       return res.json();

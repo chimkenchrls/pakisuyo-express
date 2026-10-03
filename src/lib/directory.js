@@ -90,3 +90,8 @@ export function searchStores(list, { query = '', town = 'all', category = 'all' 
   hits.sort((a, b) => a.rank - b.rank || (q ? a.s.name.localeCompare(b.s.name) : a.index - b.index));
   return hits.map((h) => h.s);
 }
+
+// What picking a store puts into the order: name plus town, unless the name already says it.
+export function storeLabel(s) {
+  return normaliseName(s.name).endsWith(` ${normaliseName(s.town)}`) ? s.name : `${s.name} (${s.town})`;
+}

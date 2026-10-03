@@ -1,4 +1,4 @@
-import { searchStores } from '../lib/directory.js';
+import { searchStores, storeLabel } from '../lib/directory.js';
 import { escapeHtml } from '../lib/html.js';
 
 // WAI-ARIA 1.2 combobox over the store directory; any typed text is also a valid choice.
@@ -7,7 +7,8 @@ export function attachStoreCombobox(input, listbox, { load, onPick }) {
   let options = [];
   let active = -1;
 
-  const ensureLoaded = () => (stores ? Promise.resolve() : load().then((list) => { stores = list; }).catch(() => { stores = []; }));
+  // On failure `stores` stays null so the next focus or keystroke retries (loadDirectory clears its cache).
+  const ensureLoaded = () => (stores ? Promise.resolve() : load().then((list) => { stores = list; }).catch(() => {}));
 
   function close() {
     listbox.hidden = true;
@@ -24,7 +25,7 @@ export function attachStoreCombobox(input, listbox, { load, onPick }) {
     }
     const matches = stores ? searchStores(stores, { query: typed }).slice(0, 6) : [];
     options = [
-      ...matches.map((s) => ({ value: s.name, html: `${escapeHtml(s.name)} <span class="combo__town">· ${escapeHtml(s.town)}</span>` })),
+      ...matches.map((s) => ({ value: storeLabel(s), html: `${escapeHtml(s.name)} <span class="combo__town">· ${escapeHtml(s.town)}</span>` })),
       { value: typed, html: `Use “${escapeHtml(typed)}” as typed`, typed: true },
     ];
     active = Math.min(active, options.length - 1);

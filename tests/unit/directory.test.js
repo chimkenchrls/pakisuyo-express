@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  normaliseName, categoryFor, townFor, distanceMeters, dedupe, fromOsmElement, buildDirectory, searchStores,
+  normaliseName, categoryFor, townFor, distanceMeters, dedupe, fromOsmElement, buildDirectory, searchStores, storeLabel,
 } from '../../src/lib/directory.js';
 import { TOWNS } from '../../src/data/towns.js';
 
@@ -162,5 +162,16 @@ describe('searchStores', () => {
     expect(ids({ town: 'Lucena', category: 'bakery' })).toEqual(['b', 'c']);
     expect(ids({ town: 'Lucena', category: 'bakery', query: 'libra' })).toEqual(['b']);
     expect(ids({ town: 'Sariaya', query: 'lugaw' })).toEqual([]);
+  });
+});
+
+describe('storeLabel (what a pick puts in the order)', () => {
+  it('adds the town so branches in different towns are distinguishable', () => {
+    expect(storeLabel(store('osm-n2', 'Jollibee', 'Lucena'))).toBe('Jollibee (Lucena)');
+  });
+
+  it('leaves names that already end with their town alone', () => {
+    expect(storeLabel(store('jollibee-sariaya', 'Jollibee Sariaya', 'Sariaya'))).toBe('Jollibee Sariaya');
+    expect(storeLabel(store('x', "Dunkin' SARIAYA", 'Sariaya'))).toBe("Dunkin' SARIAYA");
   });
 });

@@ -14,7 +14,7 @@ describe('loadDirectory', () => {
     const list = await loadDirectory({ fetchFn });
     await loadDirectory({ fetchFn });
     expect(fetchFn).toHaveBeenCalledTimes(1);
-    expect(fetchFn).toHaveBeenCalledWith('/data/directory.json');
+    expect(fetchFn).toHaveBeenCalledWith('/data/directory.json', expect.objectContaining({ signal: expect.anything() }));
     expect(list[0]).toMatchObject({ id: 'jollibee-sariaya', featured: true });
     expect(list.map((s) => s.id)).toContain('osm-n1');
   });
@@ -24,5 +24,12 @@ describe('loadDirectory', () => {
     await expect(loadDirectory({ fetchFn: failing })).rejects.toThrow('503');
     const list = await loadDirectory({ fetchFn: ok([]) });
     expect(list).toHaveLength(5); // featured only (extras duplicate featured)
+  });
+
+  it('gives up on a stalled request instead of loading forever', async () => {
+    const stalled = vi.fn((url, { signal }) => new Promise((_, reject) => {
+      signal.addEventListener('abort', () => reject(signal.reason));
+    }));
+    await expect(loadDirectory({ fetchFn: stalled, timeoutMs: 20 })).rejects.toThrow();
   });
 });

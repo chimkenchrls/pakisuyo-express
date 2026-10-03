@@ -1,6 +1,6 @@
 import { DIRECTORY_CATEGORIES, categoryById } from '../data/categories.js';
 import { SELECT_STORE_EVENT } from '../data/contact.js';
-import { searchStores } from '../lib/directory.js';
+import { searchStores, storeLabel } from '../lib/directory.js';
 import { loadDirectory } from '../lib/directory-data.js';
 import { storeImageHtml } from '../lib/images.js';
 import { escapeHtml } from '../lib/html.js';
@@ -15,7 +15,7 @@ const rowHtml = (s) => `
       <b class="dir-row__name">${escapeHtml(s.name)}${s.featured ? ' <span class="badge">Featured</span>' : ''}</b>
       <span class="dir-row__meta">${escapeHtml(s.featured ? s.categoryLabel : categoryById(s.category)?.singular ?? '')} · ${escapeHtml(s.town)}</span>
     </div>
-    <button type="button" class="dir-row__order" data-name="${escapeHtml(s.name)}" aria-label="Order from ${escapeHtml(s.name)}">Order →</button>
+    <button type="button" class="dir-row__order" data-name="${escapeHtml(storeLabel(s))}" aria-label="Order from ${escapeHtml(s.name)}">Order →</button>
   </li>`;
 
 export function mountStoreSheet({ returnFocus }) {
