@@ -188,3 +188,8 @@ html.is-locked { overflow: hidden; }
 .store-sheet__town { position: static; transform: none; padding-left: 30px; }
 .store-sheet__town-icon { position: absolute; left: 10px; color: var(--brand-yellow); font-size: .95rem; pointer-events: none; }
 .dir-row__order { display: inline-flex; align-items: center; gap: 4px; }
+
+/* Top bar: white over the hero, yellow after it */
+.site-header { transition: background-color .25s ease, box-shadow .25s ease; }
+.site-header:not(.is-over-hero) { box-shadow: 0 2px 12px rgba(0, 0, 0, .08); }
+.site-header.is-over-hero, .site-header.is-over-hero .site-nav.is-open { background: var(--surface); }

@@ -53,3 +53,29 @@ test('the ☰ menu button only appears on phones', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden();
   await expect(page.locator('#site-nav').getByRole('link', { name: 'How it works' })).toBeVisible();
 });
+
+test.describe('top bar colour follows the hero', () => {
+  const bg = (page) => page.locator('.site-header').evaluate((el) => getComputedStyle(el).backgroundColor);
+  const WHITE = 'rgb(255, 255, 255)';
+  const YELLOW = 'rgb(255, 210, 63)';
+
+  test('white over the hero, yellow once past it, white again on the way back', async ({ page }) => {
+    await page.goto('/');
+    await expect.poll(() => bg(page)).toBe(WHITE);
+    await page.locator('#how').scrollIntoViewIfNeeded();
+    await expect.poll(() => bg(page)).toBe(YELLOW);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await expect.poll(() => bg(page)).toBe(WHITE);
+  });
+
+  test('opening the page further down starts yellow', async ({ page }) => {
+    await page.goto('/#order');
+    await expect.poll(() => bg(page)).toBe(YELLOW);
+  });
+
+  test('the phone menu matches the bar', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await expect.poll(() => page.locator('#site-nav').evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(WHITE);
+  });
+});

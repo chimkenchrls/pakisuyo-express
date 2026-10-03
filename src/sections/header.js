@@ -31,3 +31,14 @@ export function renderHeader(el) {
     if (e.target.closest('a')) setOpen(false);
   });
 }
+
+// White while the yellow hero is behind the bar, the brand yellow once the hero has scrolled away.
+export function followHero(header, hero) {
+  const setOverHero = (over) => header.classList.toggle('is-over-hero', over);
+  const headerHeight = () => Math.round(header.getBoundingClientRect().height);
+  setOverHero(hero.getBoundingClientRect().bottom > headerHeight()); // right colour from the first paint
+  if (!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([entry]) => setOverHero(entry.isIntersecting), {
+    rootMargin: `-${headerHeight()}px 0px 0px 0px`,
+  }).observe(hero);
+}

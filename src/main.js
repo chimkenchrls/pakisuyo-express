@@ -3,7 +3,7 @@ import './styles/base.css';
 import './styles/sections.css';
 import './styles/demo.css';
 import './styles/motion.css';
-import { renderHeader } from './sections/header.js';
+import { renderHeader, followHero } from './sections/header.js';
 import { renderHero } from './sections/hero.js';
 import { renderRestaurants } from './sections/restaurants.js';
 import { renderHowItWorks } from './sections/how-it-works.js';
@@ -23,6 +23,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 installImageFallback(document);
 renderHeader($('site-header'));
 renderHero($('hero'));
+followHero($('site-header'), $('hero'));
 const storeSheet = mountStoreSheet({ returnFocus: () => document.querySelector('[data-action="browse-stores"]') });
 renderRestaurants($('restaurants'), { onBrowse: (trigger) => storeSheet.openFromPage(trigger) });
 renderHowItWorks($('how'));
