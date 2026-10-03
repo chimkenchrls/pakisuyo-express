@@ -180,7 +180,7 @@ html.is-locked { overflow: hidden; }
 .info-card h3 .icon { font-size: 1.35rem; }
 .benefits li { display: flex; align-items: center; gap: 10px; }
 .benefits li .icon { font-size: 1.35rem; }
-.site-header__toggle { display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 859px) { .site-header__toggle { display: inline-flex; align-items: center; justify-content: center; } }
 .store-sheet__close { display: inline-flex; align-items: center; justify-content: center; }
 .store-sheet__search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); font-size: 1.1rem; pointer-events: none; }
 .store-sheet__search input { padding-left: 42px; }

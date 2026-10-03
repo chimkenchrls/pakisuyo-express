@@ -45,3 +45,11 @@ test.describe('hours badge uses Manila time on a foreign device', () => {
     await expect(page.getByTestId('hours-badge')).toContainText('Open today 8AM–7PM');
   });
 });
+
+test('the ☰ menu button only appears on phones', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden();
+  await expect(page.locator('#site-nav').getByRole('link', { name: 'How it works' })).toBeVisible();
+});

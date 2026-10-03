@@ -221,3 +221,23 @@ test.describe('nothing covers the top bar', () => {
     await expect(page.getByRole('dialog', { name: 'All stores' })).toBeHidden();
   });
 });
+
+test('the top bar stays on screen when the panel opens after scrolling down (phone and desktop)', async ({ page }) => {
+  for (const size of [{ width: 412, height: 839 }, { width: 1280, height: 900 }]) {
+    await page.setViewportSize(size);
+    await page.goto('/');
+    await page.locator('#restaurants').scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 200));
+    await page.getByRole('button', { name: /Browse all \d+ stores/ }).click();
+    await expect(page.getByRole('dialog', { name: 'All stores' })).toBeVisible();
+    const header = page.locator('.site-header');
+    await expect(header).toBeInViewport();
+    const box = await header.boundingBox();
+    expect(Math.round(box.y)).toBe(0);
+    // Nothing else is drawn on top of the bar.
+    const hit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('.site-header') !== null,
+      { x: box.x + box.width / 2, y: box.y + box.height / 2 });
+    expect(hit).toBe(true);
+    await page.keyboard.press('Escape');
+  }
+});

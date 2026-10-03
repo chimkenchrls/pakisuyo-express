@@ -1,6 +1,6 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
-body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--surface); line-height: 1.5; overflow-x: hidden; }
+body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--surface); line-height: 1.5; overflow-x: clip; } /* clip, not hidden: hidden breaks the sticky top bar while the store panel locks scrolling */
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
