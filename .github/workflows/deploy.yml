@@ -1,0 +1,65 @@
+name: Deploy
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  production:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://pakisuyoexpress.netlify.app
+    concurrency: { group: deploy-production, cancel-in-progress: false }
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ github.event.workflow_run.head_sha }}' }
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to Netlify (production)
+        run: npx --yes netlify-cli@27 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "main ${{ github.event.workflow_run.head_sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+      - name: Smoke test the live site
+        run: npm run -s smoke -- https://pakisuyoexpress.netlify.app --retries 6 --delay 10000
+  preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    concurrency: { group: 'preview-${{ github.event.pull_request.number }}', cancel-in-progress: true }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy preview
+        id: preview
+        run: |
+          npx --yes netlify-cli@27 deploy --dir dist --no-build --site "$NETLIFY_SITE_ID" --alias "pr-${{ github.event.pull_request.number }}" --message "PR #${{ github.event.pull_request.number }}" --json > deploy.json
+          echo "url=$(node -p "require('./deploy.json').deploy_url")" >> "$GITHUB_OUTPUT"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+      - name: Comment the preview link
+        uses: actions/github-script@v7
+        env: { PREVIEW_URL: '${{ steps.preview.outputs.url }}' }
+        with:
+          script: |
+            const marker = '<!-- netlify-preview -->';
+            const body = `${marker}\n**Preview:** ${process.env.PREVIEW_URL}\nBuilt from ${context.payload.pull_request.head.sha.slice(0, 7)}.`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.body?.includes(marker));
+            if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });
