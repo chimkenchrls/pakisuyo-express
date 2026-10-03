@@ -48,7 +48,7 @@ Job names (`checks`, `e2e`, `lighthouse`) are the required status checks for bra
   - `/` returns 200 and contains the hero headline "Always ready for your";
   - no `<meta name="robots" content="noindex">` (public build);
   - `/data/directory.json` returns 200 with more than 100 stores;
-  - no third-party brand image is referenced in the built JS/HTML (`jollibee-sariaya/logo`).
+  - the third-party brand logo is **not served** (`/assets/stores/jollibee-sariaya/logo.png` must not return 200).
 
   Any failure exits non-zero.
 
