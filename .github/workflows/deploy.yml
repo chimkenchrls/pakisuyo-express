@@ -9,7 +9,9 @@ permissions:
   contents: read
 jobs:
   production:
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    # Only the tested commit, only from a push to main, and only if it is still the newest commit
+    # (re-running an old CI run must not roll production back).
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_sha == github.sha
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -19,11 +21,18 @@ jobs:
       - uses: actions/checkout@v4
         with: { ref: '${{ github.event.workflow_run.head_sha }}' }
       - uses: actions/setup-node@v4
-        with: { node-version-file: .nvmrc, cache: npm }
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/netlify/package-lock.json
       - run: npm ci
       - run: npm run build
+      - name: Install pinned Netlify CLI (from its lockfile)
+        run: npm ci --prefix tools/netlify
       - name: Deploy to Netlify (production)
-        run: npx --yes netlify-cli@27 deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "main ${{ github.event.workflow_run.head_sha }}"
+        run: tools/netlify/node_modules/.bin/netlify deploy --prod --dir dist --no-build --site "$NETLIFY_SITE_ID" --message "main ${{ github.event.workflow_run.head_sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
@@ -39,13 +48,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version-file: .nvmrc, cache: npm }
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/netlify/package-lock.json
       - run: npm ci
       - run: npm run build
+      - name: Install pinned Netlify CLI (from its lockfile)
+        run: npm ci --prefix tools/netlify
       - name: Deploy preview
         id: preview
         run: |
-          npx --yes netlify-cli@27 deploy --dir dist --no-build --site "$NETLIFY_SITE_ID" --alias "pr-${{ github.event.pull_request.number }}" --message "PR #${{ github.event.pull_request.number }}" --json > deploy.json
+          tools/netlify/node_modules/.bin/netlify deploy --dir dist --no-build --site "$NETLIFY_SITE_ID" --alias "pr-${{ github.event.pull_request.number }}" --message "PR #${{ github.event.pull_request.number }}" --json > deploy.json
           echo "url=$(node -p "require('./deploy.json').deploy_url")" >> "$GITHUB_OUTPUT"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
