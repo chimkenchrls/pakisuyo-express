@@ -52,3 +52,41 @@ export function fromOsmElement(el, towns) {
   if (!town) return null;
   return { id: `osm-${el.type[0]}${el.id}`, name, category, town, lat: round5(lat), lng: round5(lng) };
 }
+
+// A featured store's name, with and without its trailing town ("Jollibee Sariaya" → also "jollibee").
+function nameKeys(s) {
+  const name = normaliseName(s.name);
+  const town = normaliseName(s.town);
+  return name.endsWith(` ${town}`) ? [name, name.slice(0, -town.length - 1)] : [name];
+}
+
+export function buildDirectory(osmStores, extraStores, featuredStores) {
+  const taken = new Set(featuredStores.flatMap((s) => nameKeys(s).map((k) => `${k}|${s.town}`)));
+  const rest = [...extraStores, ...osmStores]
+    .filter((s) => !nameKeys(s).some((k) => taken.has(`${k}|${s.town}`)))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return [
+    ...featuredStores.map((s) => ({ ...s, featured: true })),
+    ...rest.map((s) => ({ ...s, featured: false })),
+  ];
+}
+
+export function searchStores(list, { query = '', town = 'all', category = 'all' } = {}) {
+  const q = normaliseName(query);
+  const hits = [];
+  list.forEach((s, index) => {
+    if (town !== 'all' && s.town !== town) return;
+    if (category !== 'all' && s.category !== category) return;
+    if (!q) {
+      hits.push({ s, rank: 0, index });
+      return;
+    }
+    const name = normaliseName(s.name);
+    const at = name.indexOf(q);
+    if (at < 0) return;
+    const rank = s.featured ? 0 : at === 0 ? 1 : name.includes(` ${q}`) ? 2 : 3;
+    hits.push({ s, rank, index });
+  });
+  hits.sort((a, b) => a.rank - b.rank || (q ? a.s.name.localeCompare(b.s.name) : a.index - b.index));
+  return hits.map((h) => h.s);
+}

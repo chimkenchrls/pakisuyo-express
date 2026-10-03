@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { normaliseName, categoryFor, townFor, distanceMeters, dedupe, fromOsmElement } from '../../src/lib/directory.js';
+import {
+  normaliseName, categoryFor, townFor, distanceMeters, dedupe, fromOsmElement, buildDirectory, searchStores,
+} from '../../src/lib/directory.js';
 import { TOWNS } from '../../src/data/towns.js';
 
 describe('normaliseName (Review Focus 1)', () => {
@@ -92,5 +94,73 @@ describe('fromOsmElement', () => {
     expect(fromOsmElement({ type: 'node', id: 1, lat: 13.96, lon: 121.52, tags: { amenity: 'cafe' } }, TOWNS)).toBeNull();
     expect(fromOsmElement({ type: 'node', id: 1, lat: 13.96, lon: 121.52, tags: { name: 'X', amenity: 'bank' } }, TOWNS)).toBeNull();
     expect(fromOsmElement({ type: 'node', id: 1, lat: 14.5995, lon: 120.9842, tags: { name: 'X', amenity: 'cafe' } }, TOWNS)).toBeNull();
+  });
+});
+
+const store = (id, name, town, category = 'fast-food', extra = {}) => ({ id, name, town, category, ...extra });
+
+describe('buildDirectory (Review Focus 2)', () => {
+  const featured = [store('jollibee-sariaya', 'Jollibee Sariaya', 'Sariaya'), store('dash', 'Dash Espresso', 'Sariaya', 'cafe')];
+  const extras = [store('dash-extra', 'Dash Espresso', 'Sariaya', 'cafe'), store('nena', 'Aling Nena Bakery', 'Sariaya', 'bakery')];
+  const osm = [
+    store('osm-n1', 'Jollibee', 'Sariaya'),
+    store('osm-n2', 'Jollibee', 'Lucena'),
+    store('osm-n3', 'Libra Bakery', 'Lucena', 'bakery'),
+    store('osm-n4', 'JOLLIBEE SARIAYA', 'Sariaya'),
+  ];
+  const out = buildDirectory(osm, extras, featured);
+
+  it('puts featured stores first, flagged, in featured order', () => {
+    expect(out.slice(0, 2).map((s) => [s.id, s.featured])).toEqual([['jollibee-sariaya', true], ['dash', true]]);
+  });
+
+  it('hides entries that duplicate a featured store in the same town', () => {
+    const ids = out.map((s) => s.id);
+    expect(ids).not.toContain('osm-n1');
+    expect(ids).not.toContain('osm-n4');
+    expect(ids).not.toContain('dash-extra');
+  });
+
+  it('keeps the same chain in another town, plus extras, sorted by name', () => {
+    expect(out.slice(2).map((s) => [s.id, s.featured])).toEqual([['nena', false], ['osm-n2', false], ['osm-n3', false]]);
+  });
+});
+
+describe('searchStores', () => {
+  const list = [
+    store('f1', "Dunkin' Sariaya", 'Sariaya', 'cafe', { featured: true }),
+    store('a', 'Bakery Ni Lola', 'Sariaya', 'bakery', { featured: false }),
+    store('b', 'Libra Bakery', 'Lucena', 'bakery', { featured: false }),
+    store('c', 'The Bakeshop', 'Lucena', 'bakery', { featured: false }),
+    store('d', 'Lugaw Queen', 'Lucena', 'fast-food', { featured: false }),
+    store('e', 'Wings & Dims Corner', 'Sariaya', 'fast-food', { featured: false }),
+  ];
+  const ids = (opts) => searchStores(list, opts).map((s) => s.id);
+
+  it('returns everything in list order with no query or filters', () => {
+    expect(ids({})).toEqual(['f1', 'a', 'b', 'c', 'd', 'e']);
+  });
+
+  it('ranks: starts-with, then word-starts-with, then other substring', () => {
+    expect(ids({ query: 'bak' })).toEqual(['a', 'b', 'c']);
+    expect(ids({ query: 'akery' })).toEqual(['a', 'b']);
+  });
+
+  it('puts featured matches first', () => {
+    const withFeaturedBakery = [...list, store('f2', 'Zebra Bakery', 'Sariaya', 'bakery', { featured: true })];
+    expect(searchStores(withFeaturedBakery, { query: 'bak' })[0].id).toBe('f2');
+  });
+
+  it('matches across accents, apostrophes and & (Review Focus 1)', () => {
+    expect(ids({ query: 'DÚNKIN’' })).toEqual(['f1']);
+    expect(ids({ query: 'wings and dims' })).toEqual(['e']);
+    expect(ids({ query: 'wings & dims' })).toEqual(['e']);
+  });
+
+  it('combines town and category filters with the query (AND)', () => {
+    expect(ids({ town: 'Lucena' })).toEqual(['b', 'c', 'd']);
+    expect(ids({ town: 'Lucena', category: 'bakery' })).toEqual(['b', 'c']);
+    expect(ids({ town: 'Lucena', category: 'bakery', query: 'libra' })).toEqual(['b']);
+    expect(ids({ town: 'Sariaya', query: 'lugaw' })).toEqual([]);
   });
 });
