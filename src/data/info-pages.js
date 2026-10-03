@@ -20,6 +20,8 @@ export const INFO_PAGES = {
       <p>Use the order form on this page, or message us on ${messenger}. Our team confirms every order and keeps you posted until it arrives.</p>
       <h3>Hours</h3>
       <p>Open daily, 8AM to 7PM.</p>
+      <h3>About this website</h3>
+      <p>This website is a portfolio project, made with the permission of Pakisuyo Express. It is not an official ordering channel. To order, message Pakisuyo Express on ${messenger}.</p>
       <h3>Coming soon</h3>
       <p>We're working on the Pakisuyo app, so you can order in a few taps and follow your rider live.</p>
       <p class="info-links">${messenger} · <a href="${FACEBOOK_URL}" target="_blank" rel="noopener">Facebook</a></p>`,

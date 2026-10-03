@@ -103,6 +103,7 @@ function markup() {
         </div>
         <button type="submit" class="btn btn--primary order-form__submit">Copy order &amp; open Messenger</button>
         <p class="hint">Payment is settled with our team in Messenger. Nothing is charged here.</p>
+        <p class="hint demo-notice demo-notice--form">This website is a portfolio demo. If you send the order in Messenger, it reaches Pakisuyo Express directly, and they may not accept orders made through this site.</p>
         <p class="hint">Your details are only used for this delivery. If you tick “Remember”, they're saved on this phone only. We don't store them anywhere else. <a href="#privacy">Privacy</a></p>
       </form>
     </div>

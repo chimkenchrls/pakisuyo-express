@@ -212,3 +212,7 @@ html.is-locked { overflow: hidden; }
 .info-meta { color: var(--ink-muted); font-size: .85rem; }
 .info-draft { display: inline-block; margin-top: 14px !important; background: var(--yellow-soft); color: var(--ink); border-radius: 8px; padding: 4px 10px; font-size: .8rem; font-weight: 800; }
 .info-links { margin-top: 18px !important; }
+
+/* Portfolio notice */
+.demo-notice { font-size: .85rem; font-weight: 600; }
+.demo-notice--form { margin: 0; color: var(--ink); background: var(--yellow-soft); border-radius: 10px; padding: 8px 12px; }

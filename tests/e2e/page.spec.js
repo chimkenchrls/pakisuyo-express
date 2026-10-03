@@ -90,3 +90,12 @@ test('the font is served by the site itself, not Google', async ({ page }) => {
   const family = await page.locator('.hero__title').evaluate((el) => getComputedStyle(el).fontFamily);
   expect(family).toContain('Plus Jakarta Sans');
 });
+
+test('the site says clearly that it is a portfolio demo', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#hero')).not.toContainText('Portfolio demo'); // kept out of the hero by design
+  await expect(page.locator('#order')).toContainText('This website is a portfolio demo.');
+  await expect(page.locator('#site-footer')).toContainText('Portfolio demo');
+  await page.locator('#site-footer').getByRole('link', { name: 'About', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'About' })).toContainText('portfolio project');
+});
