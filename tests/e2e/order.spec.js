@@ -27,7 +27,7 @@ test('sends a complete order: copies the message and opens Messenger', async ({ 
   await fillValidOrder(page);
 
   const popup = context.waitForEvent('page');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   expect((await popup).url()).toContain('m.me/PakisuyoExpressSariaya');
 
   await page.bringToFront();
@@ -49,7 +49,7 @@ test('shows errors and focuses the first missing field', async ({ page, context 
   await page.goto('/#order');
   let opened = false;
   context.on('page', () => { opened = true; });
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await expect(page.getByLabel(/^Name/)).toBeFocused();
   await expect(page.locator('#err-name')).toHaveText('Please enter your name.');
   await expect(page.locator('#err-payment')).toHaveText('Please choose how you will pay.');
@@ -62,7 +62,7 @@ test('falls back to a copy dialog when the clipboard is blocked', async ({ page 
   });
   await page.goto('/#order');
   await fillValidOrder(page);
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('textarea')).toHaveValue(/NEW ORDER – Pakisuyo Express/);
@@ -87,7 +87,7 @@ test.describe('location', () => {
 
     await fillValidOrder(page);
     const popup = context.waitForEvent('page');
-    await page.getByRole('button', { name: 'Send Order' }).click();
+    await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
     await popup;
     await page.bringToFront();
     const clip = await page.evaluate(() => navigator.clipboard.readText());

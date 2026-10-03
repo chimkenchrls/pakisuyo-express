@@ -26,7 +26,7 @@ async function fillOrder(page, { payment = 'GCash' } = {}) {
 
 async function send(page, context) {
   const popup = context.waitForEvent('page');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await popup;
   await page.bringToFront();
   return page.evaluate(() => navigator.clipboard.readText());
@@ -108,7 +108,7 @@ test('an unreadable cash amount is caught before sending', async ({ page }) => {
   await page.goto('/#order');
   await fillOrder(page, { payment: 'Cash on Delivery' });
   await page.getByLabel('Paying cash? How much will you pay with? (optional)').fill('lots');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await expect(page.locator('#err-changeFor')).toHaveText('Enter an amount like 500, or choose Exact amount.');
 });
 
@@ -123,7 +123,7 @@ test('the delivery fee line follows the chosen store', async ({ page }) => {
   await expect(fee).toHaveText('Delivery fee: ₱ 50 within Sariaya');
 });
 
-test('privacy is explained next to Send Order and in the footer', async ({ page }) => {
+test('privacy is explained next to the order button and in the footer', async ({ page }) => {
   await page.goto('/#order');
   await expect(page.getByText("Your details are only used for this delivery.")).toBeVisible();
   await page.getByText('Privacy', { exact: true }).click();
@@ -158,7 +158,7 @@ test.describe('contact number', () => {
     await page.goto('/#order');
     await fillOrder(page);
     await phone(page).fill('09000000000');
-    await page.getByRole('button', { name: 'Send Order' }).click();
+    await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
     await expect(page.locator('#err-phone')).toHaveText('Invalid number');
     await expect(phone(page)).toBeFocused();
   });
@@ -171,7 +171,7 @@ test('other fields reject junk and cap their length', async ({ page }) => {
   await fillOrder(page);
   await page.getByLabel(/^Name/).fill('J');
   await page.getByLabel('Exact Address').fill('Pob');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await expect(page.locator('#err-name')).toHaveText('Please enter a real name (letters only).');
   await expect(page.locator('#err-address')).toHaveText('Please add more detail to your address.');
 });

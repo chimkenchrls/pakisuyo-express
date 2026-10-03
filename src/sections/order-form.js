@@ -83,7 +83,7 @@ function markup() {
           <label class="remember__label"><input type="checkbox" name="remember" checked> Remember my details on this phone</label>
           <button type="button" class="remember__clear" data-action="clear-saved" hidden>Not you? Clear saved details</button>
         </div>
-        <button type="submit" class="btn btn--primary order-form__submit">Send Order</button>
+        <button type="submit" class="btn btn--primary order-form__submit">Copy order &amp; open Messenger</button>
         <p class="hint">Payment is settled with our team in Messenger. Nothing is charged here.</p>
         <p class="hint">Your details are only used for this delivery. If you tick “Remember”, they're saved on this phone only. We don't store them anywhere else.</p>
       </form>

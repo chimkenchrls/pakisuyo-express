@@ -55,7 +55,7 @@ test.describe('with motion allowed', () => {
     await page.getByLabel('Order List').fill('1 Chickenjoy');
     await page.locator('label.chip', { hasText: 'GCash' }).click();
     const popup = context.waitForEvent('page');
-    await page.getByRole('button', { name: 'Send Order' }).click();
+    await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
     await popup;
     await page.bringToFront();
     const toast = page.getByRole('status');

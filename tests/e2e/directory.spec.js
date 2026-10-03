@@ -99,7 +99,7 @@ test('store combobox works with the keyboard only (Review Focus 4)', async ({ pa
 
   await fillRest(page);
   const popup = context.waitForEvent('page');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await popup;
   await page.bringToFront();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen (Lucena)');
@@ -148,7 +148,7 @@ test('the form still sends a typed store when the list fails to load (Review Foc
   await page.getByRole('combobox', { name: /Store/ }).fill('Lugaw Queen');
   await fillRest(page);
   const popup = context.waitForEvent('page');
-  await page.getByRole('button', { name: 'Send Order' }).click();
+  await page.getByRole('button', { name: 'Copy order & open Messenger' }).click();
   await popup;
   await page.bringToFront();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen');
