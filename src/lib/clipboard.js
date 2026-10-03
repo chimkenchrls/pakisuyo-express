@@ -1,10 +1,14 @@
-export async function copyText(text, { nav = globalThis.navigator, win = globalThis } = {}) {
+export async function copyText(text, { nav = globalThis.navigator, win = globalThis, timeoutMs = 1500 } = {}) {
   if (!win?.isSecureContext || typeof nav?.clipboard?.writeText !== 'function') return false;
+  let timer;
+  // Some embedded webviews never settle the promise while a permission prompt is pending.
+  const timeout = new Promise((resolve) => { timer = setTimeout(() => resolve(false), timeoutMs); });
   try {
-    await nav.clipboard.writeText(text);
-    return true;
+    return await Promise.race([nav.clipboard.writeText(text).then(() => true), timeout]);
   } catch {
     return false;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -12,6 +16,7 @@ export async function copyText(text, { nav = globalThis.navigator, win = globalT
 export function copyFromTextarea(textarea, doc = globalThis.document) {
   textarea.focus();
   textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length); // iOS ignores select() on read-only fields
   try {
     return doc.execCommand('copy') === true;
   } catch {

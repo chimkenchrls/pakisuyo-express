@@ -62,3 +62,17 @@ export function shouldAutofill(currentValue, lastAutofilled) {
   const current = currentValue.trim();
   return current === '' || current === (lastAutofilled ?? '').trim();
 }
+
+// Decides the address field after a lookup for the latest pin. Our own suggestion for an
+// older pin is cleared on failure so it can't disagree with the pin; typed text always stays.
+export function addressAfterLookup({ current, lastAutofilled, result }) {
+  const ours = shouldAutofill(current, lastAutofilled);
+  if (result) {
+    return ours
+      ? { value: result, lastAutofilled: result, lookupFailed: false }
+      : { value: current, lastAutofilled, lookupFailed: false };
+  }
+  return ours
+    ? { value: '', lastAutofilled: null, lookupFailed: true }
+    : { value: current, lastAutofilled, lookupFailed: true };
+}

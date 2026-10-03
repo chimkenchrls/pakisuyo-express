@@ -4,7 +4,7 @@ import { MESSENGER_URL, SELECT_STORE_EVENT } from '../data/contact.js';
 import { validateOrder, FIELD_ORDER } from '../lib/validate.js';
 import { buildOrderMessage } from '../lib/order-message.js';
 import { copyText, copyFromTextarea } from '../lib/clipboard.js';
-import { reverseGeocode, shouldAutofill } from '../lib/geo.js';
+import { reverseGeocode, addressAfterLookup } from '../lib/geo.js';
 import { latestOnly } from '../lib/async.js';
 import { escapeHtml } from '../lib/html.js';
 import { createOrderMap } from './order-map.js';
@@ -102,15 +102,15 @@ export function renderOrderForm(el) {
       lookupTimer = setTimeout(async () => {
         const result = await lookup(p.lat, p.lng);
         if (result.stale) return;
-        if (!result.value) {
-          statusEl.textContent = "Couldn't look up address — please type it.";
-          return;
+        const next = addressAfterLookup({ current: addressEl.value, lastAutofilled, result: result.value });
+        if (next.value !== addressEl.value) {
+          addressEl.value = next.value;
+          if (next.value) setError('address', '');
         }
-        if (shouldAutofill(addressEl.value, lastAutofilled)) {
-          addressEl.value = result.value;
-          lastAutofilled = result.value;
-          setError('address', '');
-        }
+        lastAutofilled = next.lastAutofilled;
+        statusEl.textContent = next.lookupFailed
+          ? "Couldn't look up address — please type it."
+          : 'Pin set. Drag it if it’s not exactly at your gate.';
       }, 800);
     },
   });

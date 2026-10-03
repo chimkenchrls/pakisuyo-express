@@ -11,10 +11,8 @@ const REQUIRED_TEXT = {
 
 export function normalisePhone(raw) {
   if (typeof raw !== 'string') return null;
-  let digits = raw.replace(/[\s\-().]/g, '');
-  if (digits.startsWith('+63')) digits = `0${digits.slice(3)}`;
-  else if (/^63\d{10}$/.test(digits)) digits = `0${digits.slice(2)}`;
-  else if (/^9\d{9}$/.test(digits)) digits = `0${digits}`;
+  // Country code (+63 / 0063 / 63), optionally followed by a redundant 0 ("+63 0917…"), or no leading 0 at all.
+  const digits = raw.replace(/[\s\-().]/g, '').replace(/^(?:\+63|0063|63)?0?(?=9\d{9}$)/, '0');
   if (!/^09\d{9}$/.test(digits)) return null;
   return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
 }

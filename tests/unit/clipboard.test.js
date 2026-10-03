@@ -21,15 +21,26 @@ describe('copyText', () => {
     expect(nav.clipboard.writeText).not.toHaveBeenCalled();
     await expect(copyText('hi', { nav: {}, win: secure })).resolves.toBe(false);
   });
+
+  it('gives up instead of hanging when the clipboard never answers (embedded webviews)', async () => {
+    const nav = { clipboard: { writeText: () => new Promise(() => {}) } };
+    await expect(copyText('hi', { nav, win: secure, timeoutMs: 20 })).resolves.toBe(false);
+  });
 });
 
 describe('copyFromTextarea', () => {
-  const textarea = () => ({ focus: vi.fn(), select: vi.fn() });
+  const textarea = () => ({ value: 'NEW ORDER', focus: vi.fn(), select: vi.fn(), setSelectionRange: vi.fn() });
 
   it('selects the text and uses execCommand', () => {
     const ta = textarea();
     expect(copyFromTextarea(ta, { execCommand: () => true })).toBe(true);
     expect(ta.select).toHaveBeenCalled();
+  });
+
+  it('selects the full range explicitly, which iOS needs for read-only fields', () => {
+    const ta = textarea();
+    copyFromTextarea(ta, { execCommand: () => true });
+    expect(ta.setSelectionRange).toHaveBeenCalledWith(0, 'NEW ORDER'.length);
   });
 
   it('returns false when execCommand fails or throws', () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import {
-  mapsLink, isInside, isInsideSariaya, formatAddress, reverseGeocode, shouldAutofill, SARIAYA_CENTER,
+  mapsLink, isInside, isInsideSariaya, formatAddress, reverseGeocode, shouldAutofill, addressAfterLookup, SARIAYA_CENTER,
 } from '../../src/lib/geo.js';
 
 // A 2x2 square around (0,0) with a 1x1 hole, coords in GeoJSON [lng, lat] order.
@@ -89,5 +89,27 @@ describe('shouldAutofill', () => {
   it('never overwrites what the customer typed', () => {
     expect(shouldAutofill('Purok 3, blue gate', null)).toBe(false);
     expect(shouldAutofill('Rizal St, Sariaya — 2nd floor', 'Rizal St, Sariaya')).toBe(false);
+  });
+});
+
+describe('addressAfterLookup', () => {
+  it('fills an empty field and remembers the suggestion', () => {
+    expect(addressAfterLookup({ current: '', lastAutofilled: null, result: 'Rizal St, Sariaya' }))
+      .toEqual({ value: 'Rizal St, Sariaya', lastAutofilled: 'Rizal St, Sariaya', lookupFailed: false });
+  });
+
+  it('keeps typed text when a lookup succeeds', () => {
+    expect(addressAfterLookup({ current: 'Purok 3', lastAutofilled: null, result: 'Rizal St, Sariaya' }))
+      .toEqual({ value: 'Purok 3', lastAutofilled: null, lookupFailed: false });
+  });
+
+  it('clears our own stale suggestion when the lookup for a moved pin fails', () => {
+    expect(addressAfterLookup({ current: 'Rizal St, Sariaya', lastAutofilled: 'Rizal St, Sariaya', result: null }))
+      .toEqual({ value: '', lastAutofilled: null, lookupFailed: true });
+  });
+
+  it('keeps typed text when a lookup fails', () => {
+    expect(addressAfterLookup({ current: 'Purok 3', lastAutofilled: 'Rizal St, Sariaya', result: null }))
+      .toEqual({ value: 'Purok 3', lastAutofilled: 'Rizal St, Sariaya', lookupFailed: true });
   });
 });
