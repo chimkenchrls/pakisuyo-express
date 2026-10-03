@@ -8,6 +8,7 @@ const UA = 'pakisuyo-express-landing/0.1 (one-off build script; private pitch)';
 const ROOT = new URL('../public/assets/', import.meta.url);
 
 // title: an exact Commons file (preferred, checked by eye); search: a Commons query.
+// Neither: a file already saved in public/assets (owner-supplied or from the brand's site), credited via `credit`.
 // Neither set = skip, and the page falls back to a tile.
 const TARGETS = [
   { kind: 'stores', id: 'jollibee-sariaya', file: 'stores/jollibee-sariaya/logo', title: 'File:Jollibee 2011 wordmark.svg' },
@@ -15,10 +16,10 @@ const TARGETS = [
   { kind: 'stores', id: 'dunkin-sariaya', file: 'stores/dunkin-sariaya/logo', title: "File:Dunkin' logo.svg" },
   { kind: 'stores', id: 'wings-dims-sariaya', file: 'stores/wings-dims-sariaya/logo' },
   { kind: 'stores', id: 'dash-espresso-sariaya', file: 'stores/dash-espresso-sariaya/logo' },
-  { kind: 'items', id: 'chickenjoy-rice', file: 'stores/jollibee-sariaya/items/chickenjoy-rice', title: 'File:Jollibee Chickenjoy with Palabok.jpg' },
-  { kind: 'items', id: 'jolly-spaghetti', file: 'stores/jollibee-sariaya/items/jolly-spaghetti', title: 'File:Jollibee noodle dishes open.jpg' },
-  { kind: 'items', id: 'yumburger', file: 'stores/jollibee-sariaya/items/yumburger', search: null },
-  { kind: 'items', id: 'coke-float', file: 'stores/jollibee-sariaya/items/coke-float', search: null },
+  { kind: 'items', id: 'chickenjoy-rice', file: 'stores/jollibee-sariaya/items/chickenjoy-rice', credit: 'official product photo from jollibee.com.ph (private pitch only)' },
+  { kind: 'items', id: 'jolly-spaghetti', file: 'stores/jollibee-sariaya/items/jolly-spaghetti', credit: 'official product photo from jollibee.com.ph (private pitch only)' },
+  { kind: 'items', id: 'yumburger', file: 'stores/jollibee-sariaya/items/yumburger', credit: 'official product photo from jollibee.com.ph (private pitch only)' },
+  { kind: 'items', id: 'coke-float', file: 'stores/jollibee-sariaya/items/coke-float', credit: 'official product photo from jollibee.com.ph (private pitch only)' },
 ];
 
 const exists = (url) => access(url).then(() => true, () => false);
@@ -45,7 +46,10 @@ async function findOnCommons({ title, search }) {
 }
 
 const manifest = { stores: {}, items: {} };
-const credits = [];
+// Assets that aren't store images but still need crediting (kept here so re-runs don't drop them).
+const credits = [
+  '- `payments/gcash.svg` · [File:GCash logo.svg](https://commons.wikimedia.org/wiki/File:GCash_logo.svg) · Moonrivers · Public domain (GCash acceptance mark, shown because the business accepts GCash)',
+];
 
 for (const t of TARGETS) {
   // A target with neither `title` nor `search` is owner-supplied.
@@ -53,7 +57,7 @@ for (const t of TARGETS) {
     const ownExt = await findOwnFile(t.file);
     if (ownExt) {
       manifest[t.kind][t.id] = `/assets/${t.file}.${ownExt}`;
-      credits.push(`- \`${t.file}.${ownExt}\` · supplied by the project owner (private pitch only)`);
+      credits.push(`- \`${t.file}.${ownExt}\` · ${t.credit ?? 'supplied by the project owner (private pitch only)'}`);
       console.log(`✓ ${t.id}: using owner-supplied file`);
     }
     continue;

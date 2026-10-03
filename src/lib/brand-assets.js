@@ -1,8 +1,8 @@
 // Third-party brand logos/photos are for the private pitch only (spec §9). The public (launch) build drops them
-// and the store falls back to its initials or emoji tile. Owner-supplied logos (Wings & Dims, Dash) stay.
+// and the store falls back to its initials or icon tile. Owner-supplied logos (Wings & Dims, Dash) stay.
 export const BRAND_PROTECTED = new Set([
   'jollibee-sariaya', 'mcdonalds-sariaya', 'dunkin-sariaya',
-  'chickenjoy-rice', 'jolly-spaghetti',
+  'chickenjoy-rice', 'jolly-spaghetti', 'yumburger', 'coke-float',
 ]);
 
 const keep = (entries, pitch) => Object.fromEntries(Object.entries(entries ?? {}).filter(([id]) => pitch || !BRAND_PROTECTED.has(id)));

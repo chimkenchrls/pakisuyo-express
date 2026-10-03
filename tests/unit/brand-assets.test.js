@@ -14,13 +14,13 @@ describe('visibleManifest', () => {
   it('launch build drops third-party brand logos and photos, keeps owner-approved ones', () => {
     expect(visibleManifest(manifest, { pitch: false })).toEqual({
       stores: { 'wings-dims-sariaya': '/w.jpg' },
-      items: { yumburger: '/y.jpg' },
+      items: {},
     });
   });
 
   it('lists the protected brand assets explicitly', () => {
     expect([...BRAND_PROTECTED].sort()).toEqual(
-      ['chickenjoy-rice', 'dunkin-sariaya', 'jollibee-sariaya', 'jolly-spaghetti', 'mcdonalds-sariaya'],
+      ['chickenjoy-rice', 'coke-float', 'dunkin-sariaya', 'jollibee-sariaya', 'jolly-spaghetti', 'mcdonalds-sariaya', 'yumburger'],
     );
   });
 });

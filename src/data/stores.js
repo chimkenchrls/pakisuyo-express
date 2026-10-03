@@ -12,16 +12,17 @@ export const COVERAGE = {
 
 export const CATEGORIES = [{ id: 'all', label: 'All' }, ...DIRECTORY_CATEGORIES.map(({ id, label }) => ({ id, label }))];
 
-// The 5 featured stores, in display order. Menu prices are samples for the demo only.
+// The 5 featured stores, in display order. Jollibee's demo menu uses its official names and prices
+// (jollibee.com.ph, checked 3 October 2026); the Sariaya branch may charge differently.
 export const STORES = [
   {
     id: 'jollibee-sariaya', name: 'Jollibee Sariaya', category: 'fast-food', categoryLabel: 'Fast food',
     town: 'Sariaya', eta: '20–30 min', initials: 'JB', color: '#E4002B', textColor: '#FFFFFF',
     menu: [
-      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy w/ Rice', price: 99, icon: 'bowl-food' },
-      { id: 'jolly-spaghetti', name: 'Jolly Spaghetti', price: 70, icon: 'bowl-steam' },
-      { id: 'yumburger', name: 'Yumburger', price: 45, icon: 'hamburger' },
-      { id: 'coke-float', name: 'Coke Float', price: 59, icon: 'pint-glass' },
+      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy Solo', price: 98, icon: 'bowl-food' },
+      { id: 'jolly-spaghetti', name: 'Jolly Spaghetti Solo', price: 76, icon: 'bowl-steam' },
+      { id: 'yumburger', name: 'Yumburger Solo', price: 51, icon: 'hamburger' },
+      { id: 'coke-float', name: 'Coke Float', price: 80, icon: 'pint-glass' },
     ],
   },
   {

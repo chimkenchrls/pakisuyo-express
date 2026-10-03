@@ -75,7 +75,7 @@ function storeScreen(state) {
       <div class="ds-store-hero" style="background:${store.color}">${storeImageHtml(store, 'ds-store-logo')}</div>
       <div class="ds-pad">
         <h3 class="ds-h">${escapeHtml(store.name)}</h3>
-        <p class="ds-muted">${store.menu.length ? 'Sample menu · prices for demo only' : `${escapeHtml(store.categoryLabel)} · ${store.eta}`}</p>
+        <p class="ds-muted">${store.menu.length ? 'Prices from jollibee.com.ph · may differ in-store' : `${escapeHtml(store.categoryLabel)} · ${store.eta}`}</p>
       </div>
       ${menu}
       ${count ? `<button type="button" class="ds-cartbar" data-action="GO_CHECKOUT"><span>${icon('shopping-bag')} ${count} item${count > 1 ? 's' : ''}</span><span>View cart · ${peso(subtotal)}</span></button>` : ''}

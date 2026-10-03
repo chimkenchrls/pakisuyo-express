@@ -12,8 +12,8 @@ describe('cart', () => {
     cart = addItem(cart, chickenjoy);
     cart = addItem(cart, cokeFloat);
     expect(cart.lines).toEqual([
-      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy w/ Rice', price: 99, qty: 2 },
-      { id: 'coke-float', name: 'Coke Float', price: 59, qty: 1 },
+      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy Solo', price: 98, qty: 2 },
+      { id: 'coke-float', name: 'Coke Float', price: 80, qty: 1 },
     ]);
     expect(itemCount(cart)).toBe(3);
   });
@@ -37,11 +37,11 @@ describe('cart', () => {
 });
 
 describe('totals', () => {
-  const cart = addItem(addItem(emptyCart(), chickenjoy), cokeFloat); // 99 + 59
+  const cart = addItem(addItem(emptyCart(), chickenjoy), cokeFloat); // 98 + 80
 
   it('charges ₱50 delivery for Sariaya stores', () => {
     expect(totals(cart, jollibee)).toEqual({
-      subtotal: 158, fee: 50, feeKnown: true, discount: 0, total: 208,
+      subtotal: 178, fee: 50, feeKnown: true, discount: 0, total: 228,
       feeLabel: 'Delivery fee (within Sariaya)', totalLabel: 'Total',
     });
   });
@@ -49,12 +49,12 @@ describe('totals', () => {
   it('applies the PAKISUYO10 promo to the delivery fee', () => {
     const t = totals(cart, jollibee, { promoApplied: true });
     expect(t.discount).toBe(10);
-    expect(t.total).toBe(198);
+    expect(t.total).toBe(218);
   });
 
   it('does not invent a fee for out-of-town stores, and ignores the promo', () => {
     expect(totals(cart, outOfTown, { promoApplied: true })).toEqual({
-      subtotal: 158, fee: 0, feeKnown: false, discount: 0, total: 158,
+      subtotal: 178, fee: 0, feeKnown: false, discount: 0, total: 178,
       feeLabel: 'Out-of-town fee: confirmed by our team', totalLabel: 'Total (excl. delivery)',
     });
   });

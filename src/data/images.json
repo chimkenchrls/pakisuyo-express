@@ -8,6 +8,8 @@
   },
   "items": {
     "chickenjoy-rice": "/assets/stores/jollibee-sariaya/items/chickenjoy-rice.jpg",
-    "jolly-spaghetti": "/assets/stores/jollibee-sariaya/items/jolly-spaghetti.jpg"
+    "jolly-spaghetti": "/assets/stores/jollibee-sariaya/items/jolly-spaghetti.jpg",
+    "yumburger": "/assets/stores/jollibee-sariaya/items/yumburger.jpg",
+    "coke-float": "/assets/stores/jollibee-sariaya/items/coke-float.jpg"
   }
 }

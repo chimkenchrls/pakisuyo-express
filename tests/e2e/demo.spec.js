@@ -6,10 +6,10 @@ test('owner can tap through a whole order', async ({ page }) => {
   await demo.scrollIntoViewIfNeeded(); // splash waits until the phone is actually on screen
 
   await demo.getByRole('button', { name: /Jollibee Sariaya/ }).click(); // splash auto-skips after 1s
-  await expect(demo.getByText('Sample menu · prices for demo only')).toBeVisible();
-  await demo.getByRole('button', { name: 'Add 1-pc Chickenjoy w/ Rice' }).click();
+  await expect(demo.getByText('Prices from jollibee.com.ph · may differ in-store')).toBeVisible();
+  await demo.getByRole('button', { name: 'Add 1-pc Chickenjoy Solo' }).click();
   await demo.getByRole('button', { name: 'Add Coke Float' }).click();
-  await demo.getByRole('button', { name: /View cart · ₱ 158/ }).click();
+  await demo.getByRole('button', { name: /View cart · ₱ 178/ }).click();
 
   await expect(demo.getByText('Delivery fee (within Sariaya)')).toBeVisible();
   await demo.getByRole('button', { name: 'Change' }).click();
@@ -19,8 +19,8 @@ test('owner can tap through a whole order', async ({ page }) => {
   await demo.getByRole('button', { name: /PAKISUYO10/ }).click();
   await expect(demo.getByText('Promo (PAKISUYO10)')).toBeVisible();
 
-  // 99 + 59 + 50 − 10 = 198. A double-tap must place exactly one order.
-  await demo.getByRole('button', { name: 'Place Order · ₱ 198' }).dblclick();
+  // 98 + 80 + 50 − 10 = 218. A double-tap must place exactly one order.
+  await demo.getByRole('button', { name: 'Place Order · ₱ 218' }).dblclick();
   await expect(demo.locator('.ds-step')).toHaveCount(5);
   await expect(demo.getByText('Delivered! Enjoy your meal.')).toBeVisible({ timeout: 5000 });
 
@@ -35,7 +35,7 @@ test('stores without a menu point back to the demo store', async ({ page }) => {
   await demo.getByRole('button', { name: /McDonald's Sariaya/ }).click();
   await expect(demo.getByText('Menu coming soon for this store.')).toBeVisible();
   await demo.getByRole('button', { name: 'Try Jollibee Sariaya' }).click();
-  await expect(demo.getByText('Sample menu · prices for demo only')).toBeVisible();
+  await expect(demo.getByText('Prices from jollibee.com.ph · may differ in-store')).toBeVisible();
 });
 
 test('search keeps focus while typing and filters stores', async ({ page }) => {
