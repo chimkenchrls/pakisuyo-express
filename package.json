@@ -12,7 +12,8 @@
     "test:e2e": "playwright test",
     "fetch:boundary": "node scripts/fetch-boundary.mjs",
     "fetch:images": "node scripts/fetch-images.mjs",
-    "export:logos": "node scripts/export-logos.mjs"
+    "export:logos": "node scripts/export-logos.mjs",
+    "fetch:stores": "node scripts/fetch-stores.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
