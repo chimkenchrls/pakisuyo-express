@@ -1,4 +1,9 @@
-# Pakisuyo Express Sariaya: pitch landing page
+# Pakisuyo Express Sariaya
+
+[![CI](https://github.com/chimkenchrls/pakisuyo-express/actions/workflows/ci.yml/badge.svg)](https://github.com/chimkenchrls/pakisuyo-express/actions/workflows/ci.yml)
+[![Deploy](https://github.com/chimkenchrls/pakisuyo-express/actions/workflows/deploy.yml/badge.svg)](https://github.com/chimkenchrls/pakisuyo-express/actions/workflows/deploy.yml)
+
+**Live:** https://pakisuyoexpress.netlify.app
 
 Mobile-first landing page for Pakisuyo Express Sariaya: a working Messenger order form with a map pin, and a tap-through preview of the future delivery app.
 
@@ -60,16 +65,24 @@ npm run export:logos     # logo PNGs incl. 1080×1080 Facebook profile picture
 3. At the registrar, either switch the nameservers to the ones Netlify shows (easiest), or add the `A`/`CNAME` records it lists.
 4. Wait for DNS (minutes to a few hours); Netlify issues the free HTTPS certificate automatically. HTTPS is required for "Use my current location".
 
-## Deploying
+## How changes ship
 
-**Pitch site (for the owner): https://pakisuyoexpress.netlify.app**, private link with brand logos and `noindex`.
-Upload a local pitch build as-is (Netlify must not rebuild it, or it would become the public version):
+Every change goes through a pull request; `main` is protected and only accepts green builds.
 
-```bash
-npm run build:pitch
-npx netlify-cli deploy --prod --dir dist --no-build --site pakisuyoexpress
-```
+1. **Branch → pull request.**
+2. **CI** (`.github/workflows/ci.yml`) runs three required checks:
+   - `checks`: unit tests (Vitest), public build and pitch build
+   - `e2e`: Playwright end-to-end tests on a phone viewport (report uploaded on failure)
+   - `lighthouse`: Lighthouse CI, median of 3 runs; fails below Performance 90 or Accessibility 95 (`lighthouserc.json`)
+3. **Preview** (`.github/workflows/deploy.yml`): the PR's public build is deployed to `pr-<number>--pakisuyoexpress.netlify.app` and the link is commented on the PR. Previews require a Netlify login (Netlify's default protection for non-production deploys).
+4. **Merge** once all checks pass.
+5. **Production:** after CI succeeds on `main`, the exact tested commit is built and deployed to https://pakisuyoexpress.netlify.app, then `npm run smoke` checks the live site (title, app script, store list, no `noindex`, no brand images served). A failing smoke test fails the workflow.
 
-**Public launch (later):** run `npm run build` (no brand logos or photos, indexable) and deploy it the same way,
-ideally to the owner's own domain (see "Connecting a domain" above). `netlify.toml` builds the public version
-if the site is ever connected to GitHub for automatic deploys.
+**Secrets and settings (GitHub → Settings → Secrets and variables → Actions):**
+
+| Name | Type | What |
+|---|---|---|
+| `NETLIFY_AUTH_TOKEN` | Secret | Netlify personal access token. Rotate with `gh secret set NETLIFY_AUTH_TOKEN`. |
+| `NETLIFY_SITE_ID` | Variable | `6f251678-3b03-47f2-96f9-e5eeebf33bc4` |
+
+**Owner pitch (local only):** the pitch build (brand logos and photos) is never deployed by CI. Its third-party images are not committed; they live only on the developer's machine in `public/assets/stores/jollibee-sariaya/`. To show it, run `npm run dev:pitch`. If it ever needs a link, deploy `npm run build:pitch` manually to a **separate** Netlify site, never production.
