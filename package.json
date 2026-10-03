@@ -15,7 +15,8 @@
     "fetch:boundary": "node scripts/fetch-boundary.mjs",
     "fetch:images": "node scripts/fetch-images.mjs",
     "export:logos": "node scripts/export-logos.mjs",
-    "fetch:stores": "node scripts/fetch-stores.mjs"
+    "fetch:stores": "node scripts/fetch-stores.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
     "@phosphor-icons/core": "^2.1.1",
