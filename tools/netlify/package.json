@@ -1,0 +1,8 @@
+{
+  "name": "pakisuyo-deploy-tools",
+  "private": true,
+  "description": "Netlify CLI pinned through its own lockfile; installed only in deploy jobs (npm ci --prefix tools/netlify).",
+  "devDependencies": {
+    "netlify-cli": "27.10.2"
+  }
+}
