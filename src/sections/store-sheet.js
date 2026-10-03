@@ -60,6 +60,8 @@ export function mountStoreSheet({ returnFocus }) {
   let failed = false;
   let openedFromPage = false;
   let afterClose = null;
+  let returnTarget = null;
+  let closingByUs = false; // our own history.back(): returning to e.g. #order is not "navigating away"
   let searchTimer;
 
   function renderList() {
@@ -93,19 +95,28 @@ export function mountStoreSheet({ returnFocus }) {
       .finally(renderList);
   }
 
-  function close() {
+  // navigatedAway: closed because the visitor followed a link (e.g. the header's "Order Now"),
+  // so leave focus and scroll where that link put them.
+  function close({ navigatedAway = false } = {}) {
     if (sheet.hidden) return;
     sheet.hidden = true;
     document.documentElement.classList.remove('is-locked');
     const next = afterClose;
+    const target = returnTarget ?? returnFocus();
     afterClose = null;
+    returnTarget = null;
+    if (navigatedAway) {
+      openedFromPage = false;
+      return;
+    }
     if (next) next();
-    else returnFocus()?.focus();
+    else target?.focus();
   }
 
   function requestClose() {
     if (openedFromPage) {
       openedFromPage = false;
+      closingByUs = true;
       history.back(); // hashchange → close()
     } else {
       history.replaceState(null, '', `${location.pathname}${location.search}`);
@@ -113,7 +124,14 @@ export function mountStoreSheet({ returnFocus }) {
     }
   }
 
-  const syncToHash = () => (location.hash === '#stores' ? open() : close());
+  function syncToHash() {
+    if (location.hash === '#stores') {
+      open();
+      return;
+    }
+    close({ navigatedAway: Boolean(location.hash) && !closingByUs });
+    closingByUs = false;
+  }
   window.addEventListener('hashchange', syncToHash);
   syncToHash();
 
@@ -171,8 +189,9 @@ export function mountStoreSheet({ returnFocus }) {
   });
 
   return {
-    openFromPage() {
+    openFromPage(trigger = null) {
       openedFromPage = true;
+      returnTarget = trigger;
       location.hash = 'stores'; // adds a history entry so Back closes it
       open(); // open now; the async hashchange then finds it already open
     },

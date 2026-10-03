@@ -1,11 +1,11 @@
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 50; background: var(--brand-yellow); box-shadow: 0 1px 0 rgba(0, 0, 0, .06); }
-.site-header__inner { display: flex; align-items: center; gap: 12px; min-height: 64px; position: relative; }
+.site-header { position: sticky; top: 0; z-index: 90; /* above the store sheet, so the bar and its menu stay usable */ background: var(--brand-yellow); box-shadow: 0 1px 0 rgba(0, 0, 0, .06); }
+.site-header__inner { display: flex; align-items: center; gap: 12px; min-height: var(--header-h); position: relative; }
 .site-header__brand { text-decoration: none; margin-right: auto; }
 .site-nav { display: none; }
 .site-nav a { font-weight: 600; text-decoration: none; padding: 10px 12px; border-radius: 8px; }
 .site-nav a:hover { background: rgba(0, 0, 0, .06); }
-.site-nav.is-open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--brand-yellow); padding: 8px var(--gutter) 16px; box-shadow: 0 8px 16px rgba(0, 0, 0, .08); }
+.site-nav.is-open { display: flex; flex-direction: column; position: absolute; top: var(--header-h); left: 0; right: 0; background: var(--brand-yellow); padding: 8px var(--gutter) 16px; box-shadow: 0 8px 16px rgba(0, 0, 0, .08); }
 .site-header__cta { min-height: 40px; padding: 8px 16px; }
 .site-header__toggle { width: 44px; height: 44px; border: 0; background: transparent; font-size: 1.5rem; cursor: pointer; }
 @media (min-width: 860px) {
@@ -69,7 +69,7 @@
 .field { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
 .field[hidden] { display: none; }
 .field > label, .field > legend { font-weight: 700; padding: 0; margin-bottom: 6px; }
-.field--required > label::after, .field--required > legend::after { content: ' *'; color: var(--brand-red); }
+.field--required > label::after, .field--required > legend::after, .field--required > .field__label-row > label::after { content: ' *'; color: var(--brand-red); }
 .field input, .field select, .field textarea { width: 100%; min-height: 44px; padding: 10px 12px; border: 1.5px solid #D9D9D9; border-radius: 12px; background: var(--surface); }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ink); outline: none; }
 [aria-invalid="true"] { border-color: var(--danger) !important; }
@@ -109,7 +109,7 @@
 .browse-btn:hover { background: #000; }
 .restaurants__note { margin: 0; color: var(--ink-muted); font-size: .85rem; }
 html.is-locked { overflow: hidden; }
-.store-sheet { position: fixed; inset: 0; z-index: 80; background: var(--surface); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; animation: sheet-in .2s ease-out; }
+.store-sheet { position: fixed; inset: var(--header-h) 0 0 0; z-index: 80; background: var(--surface); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; animation: sheet-in .2s ease-out; }
 .store-sheet[hidden] { display: none; }
 @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
 .store-sheet__head { position: sticky; top: 0; z-index: 1; background: var(--brand-yellow); padding: 12px var(--gutter) 10px; }
@@ -164,3 +164,8 @@ html.is-locked { overflow: hidden; }
 .pay-badge { display: inline-flex; align-items: center; gap: 8px; }
 .pay-logo { display: block; height: 18px; width: auto; }
 .pay-icon { flex: none; color: var(--success); }
+
+/* Store field: label + "Browse all stores" on one row */
+.field__label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.field__label-row label { font-weight: 700; }
+.link-btn { border: 0; background: none; padding: 6px 0; min-height: 32px; color: var(--brand-red); font-weight: 700; font-size: .9rem; text-decoration: underline; cursor: pointer; }

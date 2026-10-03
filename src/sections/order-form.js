@@ -49,7 +49,10 @@ function markup() {
         ${field('address', 'Exact Address', control('input', 'address', 'autocomplete="street-address"'))}
         ${field('landmark', 'Landmark', control('input', 'landmark', 'placeholder="e.g. Blue gate beside the chapel"'))}
         <div class="field field--required combo" id="field-store">
-          <label for="f-store">Store/s</label>
+          <div class="field__label-row">
+            <label for="f-store">Store/s</label>
+            <button type="button" class="link-btn" data-action="browse-stores-form">Browse all stores</button>
+          </div>
           <input id="f-store" name="store" maxlength="${LIMITS.store}" role="combobox" aria-autocomplete="list" aria-expanded="false"
             aria-controls="store-listbox" aria-describedby="err-store" autocomplete="off"
             placeholder="Type a store, e.g. Jollibee or Lugaw Queen">
@@ -97,7 +100,7 @@ function markup() {
     </dialog>`;
 }
 
-export function renderOrderForm(el) {
+export function renderOrderForm(el, { onBrowse } = {}) {
   el.className = 'section order';
   el.innerHTML = markup();
 
@@ -165,6 +168,7 @@ export function renderOrderForm(el) {
     onPick: () => { setError('store', ''); updateFee(); },
   });
   storeInput.addEventListener('input', updateFee);
+  el.querySelector('[data-action="browse-stores-form"]').addEventListener('click', (e) => onBrowse?.(e.currentTarget));
   updateFee();
 
   // Contact number: digits only (max 11), pasted +63 numbers become 09…, checked when leaving the field.

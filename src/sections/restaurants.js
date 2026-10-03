@@ -27,8 +27,9 @@ export function renderRestaurants(el, { onBrowse }) {
     </div>`;
 
   el.addEventListener('click', (e) => {
-    if (e.target.closest('[data-action="browse-stores"]')) {
-      onBrowse();
+    const browse = e.target.closest('[data-action="browse-stores"]');
+    if (browse) {
+      onBrowse(browse);
       return;
     }
     const card = e.target.closest('.store-card');

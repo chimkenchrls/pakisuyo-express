@@ -17,22 +17,48 @@ export function attachStoreCombobox(input, listbox, { load, onPick }) {
     active = -1;
   }
 
+  const toOption = (s) => ({ value: storeLabel(s), html: `${escapeHtml(s.name)} <span class="combo__town">· ${escapeHtml(s.town)}</span>` });
+
+  // Keep the field and its list clear of the sticky header and inside the screen (keyboard included).
+  function fitList() {
+    const headerBottom = (document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0) + 8;
+    const scrollBy = (dy) => window.scrollBy({ top: dy, behavior: 'instant' });
+    let rect = input.getBoundingClientRect();
+    if (rect.top < headerBottom) {
+      scrollBy(rect.top - headerBottom);
+      rect = input.getBoundingClientRect();
+    }
+    const viewport = window.visualViewport?.height ?? window.innerHeight;
+    let room = viewport - rect.bottom - 12;
+    const wanted = 200;
+    if (room < wanted && rect.top - headerBottom > 0) {
+      scrollBy(Math.min(wanted - room, rect.top - headerBottom));
+      rect = input.getBoundingClientRect();
+      room = viewport - rect.bottom - 12;
+    }
+    listbox.style.maxHeight = `${Math.max(120, Math.min(320, room))}px`;
+  }
+
+  // Empty field: the whole list (featured first). Typing: best matches plus "use as typed".
   function render() {
     const typed = input.value.trim();
-    if (!typed) {
+    if (!typed && !stores?.length) {
       close();
       return;
     }
-    const matches = stores ? searchStores(stores, { query: typed }).slice(0, 6) : [];
-    options = [
-      ...matches.map((s) => ({ value: storeLabel(s), html: `${escapeHtml(s.name)} <span class="combo__town">· ${escapeHtml(s.town)}</span>` })),
-      { value: typed, html: `Use “${escapeHtml(typed)}” as typed`, typed: true },
-    ];
+    options = typed
+      ? [
+        ...(stores ? searchStores(stores, { query: typed }).slice(0, 6) : []).map(toOption),
+        { value: typed, html: `Use “${escapeHtml(typed)}” as typed`, typed: true },
+      ]
+      : stores.map(toOption);
     active = Math.min(active, options.length - 1);
     listbox.innerHTML = options.map((o, i) => `
       <li role="option" id="store-opt-${i}" class="combo__option${o.typed ? ' combo__option--typed' : ''}" aria-selected="${i === active}" data-index="${i}">${o.html}</li>`).join('');
+    const wasHidden = listbox.hidden;
     listbox.hidden = false;
     input.setAttribute('aria-expanded', 'true');
+    if (wasHidden) fitList();
     if (active >= 0) input.setAttribute('aria-activedescendant', `store-opt-${active}`);
     else input.removeAttribute('aria-activedescendant');
   }
@@ -43,7 +69,9 @@ export function attachStoreCombobox(input, listbox, { load, onPick }) {
     onPick?.();
   }
 
-  input.addEventListener('focus', () => { ensureLoaded(); });
+  const openIfFocused = () => { if (document.activeElement === input) render(); };
+  input.addEventListener('focus', () => { ensureLoaded().then(openIfFocused); });
+  input.addEventListener('click', () => { if (listbox.hidden) ensureLoaded().then(openIfFocused); });
   input.addEventListener('input', () => {
     active = -1;
     render();

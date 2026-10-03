@@ -153,3 +153,71 @@ test('the form still sends a typed store when the list fails to load (Review Foc
   await page.bringToFront();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen');
 });
+
+test.describe('store field shows the list', () => {
+  test('tapping the empty field lists every store, featured first, without typing', async ({ page }) => {
+    await page.goto('/#order');
+    await page.getByRole('combobox', { name: /Store/ }).click();
+    const options = page.getByRole('option');
+    await expect(options).toHaveCount(10); // fixture: featured 5 + 5 OSM stores
+    await expect(options.first()).toContainText('Jollibee Sariaya');
+    await expect(page.getByRole('option', { name: /as typed/ })).toHaveCount(0);
+    await page.getByRole('option', { name: /Libra Bakery/ }).click();
+    await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('Libra Bakery (Lucena)');
+  });
+
+  test('"Browse all stores" next to the field opens the full list and comes back to the form', async ({ page }) => {
+    await page.goto('/#order');
+    await page.getByRole('button', { name: 'Browse all stores' }).click();
+    const sheet = page.getByRole('dialog', { name: 'All stores' });
+    await expect(sheet).toBeVisible();
+    await sheet.getByRole('button', { name: 'Order from Lugaw Queen' }).click();
+    await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('Lugaw Queen (Lucena)');
+    await expect(page.getByLabel('Order List')).toBeFocused();
+  });
+});
+
+test.describe('nothing covers the top bar', () => {
+  const headerBottom = (page) => page.locator('.site-header').evaluate((h) => h.getBoundingClientRect().bottom);
+
+  test('the store dropdown stays below the header, even when the field starts under it (A)', async ({ page }) => {
+    await page.goto('/#order');
+    const combo = page.getByRole('combobox', { name: /Store/ });
+    // Scroll so the field sits partly behind the sticky header.
+    await combo.evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().top - 30));
+    await combo.focus();
+    await combo.pressSequentially('j');
+    const list = page.getByRole('listbox');
+    await expect(list).toBeVisible();
+    const hb = await headerBottom(page);
+    const inputTop = await combo.evaluate((el) => el.getBoundingClientRect().top);
+    const box = await list.evaluate((el) => { const r = el.getBoundingClientRect(); return { top: r.top, bottom: r.bottom }; });
+    expect(inputTop).toBeGreaterThanOrEqual(hb);
+    expect(box.top).toBeGreaterThanOrEqual(hb);
+    expect(box.bottom).toBeLessThanOrEqual(await page.evaluate(() => window.innerHeight));
+  });
+
+  test('the All stores panel opens below the header, which stays usable (B)', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /Browse all \d+ stores/ }).click();
+    const sheet = page.getByRole('dialog', { name: 'All stores' });
+    await expect(sheet).toBeVisible();
+    const hb = await headerBottom(page);
+    expect(await sheet.evaluate((el) => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(hb - 1);
+    await expect(page.locator('.site-header .site-header__brand')).toBeVisible();
+
+    // Header's Order Now closes the panel and lands on the order form.
+    await page.locator('.site-header').getByRole('link', { name: 'Order Now' }).click();
+    await expect(sheet).toBeHidden();
+    await expect(page).toHaveURL(/#order$/);
+    await expect(page.locator('#order').getByRole('heading', { name: 'Place your order' })).toBeInViewport();
+  });
+
+  test('the mobile menu opens on top of the panel', async ({ page }) => {
+    await page.goto('/#stores');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await expect(page.locator('#site-nav').getByRole('link', { name: 'How it works' })).toBeVisible();
+    await page.locator('#site-nav').getByRole('link', { name: 'How it works' }).click();
+    await expect(page.getByRole('dialog', { name: 'All stores' })).toBeHidden();
+  });
+});

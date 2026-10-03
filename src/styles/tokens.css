@@ -16,4 +16,5 @@
   --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --max-w: 1120px;
   --gutter: 16px;
+  --header-h: 64px;
 }
