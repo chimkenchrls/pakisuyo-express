@@ -32,7 +32,8 @@ export function mountDemo(root, { stepMs = stepMsFromUrl(), splashMs = 1000 } = 
     }
   }
 
-  function render(previousScreen) {
+  function render(previousScreen, action = {}) {
+    const oldProgress = screenEl.querySelector('.ds-rider')?.style.getPropertyValue('--progress');
     const active = document.activeElement;
     const hadFocus = screenEl.contains(active);
     const key = hadFocus ? focusKeyOf(active) : null;
@@ -40,6 +41,16 @@ export function mountDemo(root, { stepMs = stepMsFromUrl(), splashMs = 1000 } = 
 
     screenEl.innerHTML = renderScreen(state);
     captionEl.textContent = CAPTIONS[state.screen];
+
+    // Start the moped from where it was so the CSS transition can drive it to the new step.
+    const rider = screenEl.querySelector('.ds-rider');
+    if (rider && oldProgress && previousScreen === 'tracking') {
+      const target = rider.style.getPropertyValue('--progress');
+      rider.style.setProperty('--progress', oldProgress);
+      rider.getBoundingClientRect(); // commit the old position before moving
+      rider.style.setProperty('--progress', target);
+    }
+    if (action.type === 'ADD_ITEM') screenEl.querySelector('.ds-cartbar')?.classList.add('is-bumped');
 
     if (!hadFocus) return;
     const target = [...screenEl.querySelectorAll('[data-action], [data-focus-key]')].find((el) => focusKeyOf(el) === key);
@@ -57,7 +68,7 @@ export function mountDemo(root, { stepMs = stepMsFromUrl(), splashMs = 1000 } = 
     if (next === state) return;
     state = next;
     syncTimer();
-    render(previousScreen);
+    render(previousScreen, action);
   }
 
   screenEl.addEventListener('click', (e) => {

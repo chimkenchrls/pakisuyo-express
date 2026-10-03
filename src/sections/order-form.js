@@ -236,8 +236,12 @@ export function renderOrderForm(el, { onBrowse } = {}) {
     };
   }
 
+  const TOAST_CHECK = '<svg class="toast__check" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">'
+    + '<circle cx="12" cy="12" r="11" fill="#2A8A3E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
   function showToast(message) {
-    toast.textContent = message;
+    toast.innerHTML = `${TOAST_CHECK}<span></span>`;
+    toast.querySelector('span').textContent = message;
     toast.hidden = false;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { toast.hidden = true; }, 5000);

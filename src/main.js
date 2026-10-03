@@ -2,6 +2,7 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/sections.css';
 import './styles/demo.css';
+import './styles/motion.css';
 import { renderHeader } from './sections/header.js';
 import { renderHero } from './sections/hero.js';
 import { renderRestaurants } from './sections/restaurants.js';
@@ -12,8 +13,12 @@ import { renderAppPromo } from './sections/app-promo.js';
 import { renderFooter } from './sections/footer.js';
 import { mountStoreSheet } from './sections/store-sheet.js';
 import { installImageFallback } from './lib/images.js';
+import { setupReveal } from './lib/reveal.js';
 
 const $ = (id) => document.getElementById(id);
+
+// Animations only when the visitor hasn't asked their phone/computer to reduce motion.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
 
 installImageFallback(document);
 renderHeader($('site-header'));
@@ -25,3 +30,4 @@ renderOrderForm($('order'), { onBrowse: (trigger) => storeSheet.openFromPage(tri
 renderCoverage($('coverage'));
 renderAppPromo($('app'));
 renderFooter($('site-footer'));
+setupReveal();
