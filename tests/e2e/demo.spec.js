@@ -13,8 +13,9 @@ test('owner can tap through a whole order', async ({ page }) => {
 
   await expect(demo.getByText('Delivery fee (within Sariaya)')).toBeVisible();
   await demo.getByRole('button', { name: 'Change' }).click();
-  await demo.getByRole('button', { name: /Maya/ }).click();
-  await expect(demo.locator('.ds-pm')).toContainText('Maya');
+  await demo.getByRole('button', { name: /Cash on Delivery/ }).click();
+  await expect(demo.locator('.ds-pm')).toContainText('Cash on Delivery');
+  await expect(demo.getByRole('button', { name: /Maya|Card/ })).toHaveCount(0);
   await demo.getByRole('button', { name: /PAKISUYO10/ }).click();
   await expect(demo.getByText('Promo (PAKISUYO10)')).toBeVisible();
 

@@ -175,3 +175,13 @@ test('other fields reject junk and cap their length', async ({ page }) => {
   await expect(page.locator('#err-name')).toHaveText('Please enter a real name (letters only).');
   await expect(page.locator('#err-address')).toHaveText('Please add more detail to your address.');
 });
+
+test('payment is Cash on Delivery or GCash only, with the GCash logo', async ({ page }) => {
+  await page.goto('/#order');
+  const chips = page.locator('#field-payment label.chip');
+  await expect(chips).toHaveCount(2);
+  await expect(chips).toContainText(['Cash on Delivery', 'GCash']);
+  await expect(chips.nth(1).locator('img[src="/assets/payments/gcash.svg"]')).toBeVisible();
+  await expect(page.locator('#how')).toContainText('Cash on Delivery or GCash');
+  await expect(page.locator('#app')).not.toContainText(/Maya|Card/);
+});

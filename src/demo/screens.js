@@ -1,5 +1,5 @@
 import { CATEGORIES, PROMO, getStore } from '../data/stores.js';
-import { PAYMENT_METHODS } from '../data/payments.js';
+import { PAYMENT_METHODS, paymentBadgeHtml } from '../data/payments.js';
 import { itemCount, totals, peso } from '../lib/cart.js';
 import { storeImageHtml, itemImageHtml } from '../lib/images.js';
 import { logoStacked } from '../brand/logo.js';
@@ -88,7 +88,7 @@ function sheet(state) {
       <h4>Payment method</h4>
       ${PAYMENT_METHODS.map((m) => `
         <button type="button" class="ds-sheet-option${m.id === state.payment ? ' is-on' : ''}" data-action="SET_PAYMENT"
-          data-payment="${m.id}" aria-pressed="${m.id === state.payment}"><span>${m.icon} ${m.label}</span>${m.id === state.payment ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}
+          data-payment="${m.id}" aria-pressed="${m.id === state.payment}"><span class="pay-badge">${paymentBadgeHtml(m)}</span>${m.id === state.payment ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}
     </div>`;
 }
 
@@ -111,7 +111,7 @@ function checkout(state) {
       </section>
       <section class="ds-card">
         <div class="ds-row"><b>Payment method</b><button type="button" class="ds-link" data-action="OPEN_SHEET">Change</button></div>
-        <div class="ds-pm ds-row"><span>${method.icon} <b>${method.label}</b></span><b>${peso(t.total)}</b></div>
+        <div class="ds-pm ds-row"><b class="pay-badge">${paymentBadgeHtml(method)}</b><b>${peso(t.total)}</b></div>
         ${promo}
       </section>
       <section class="ds-card">

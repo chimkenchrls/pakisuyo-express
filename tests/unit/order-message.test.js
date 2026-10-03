@@ -38,9 +38,9 @@ describe('buildOrderMessage', () => {
   });
 
   it('uses the store exactly as picked or typed (trimmed) and long payment labels', () => {
-    const msg = buildOrderMessage({ ...BASE, store: '  Aling Nena Bakery ', payment: 'card' });
+    const msg = buildOrderMessage({ ...BASE, store: '  Aling Nena Bakery ', payment: 'cod' });
     expect(msg).toContain('Store/s: Aling Nena Bakery');
-    expect(msg).toContain('Payment: Credit/Debit Card');
+    expect(msg).toContain('Payment: Cash on Delivery');
   });
 
   it('adds the change amount for cash on delivery only', () => {

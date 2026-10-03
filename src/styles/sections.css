@@ -82,7 +82,7 @@
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { position: relative; cursor: pointer; }
 .chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
-.chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1.5px solid #D9D9D9; border-radius: 12px; font-weight: 600; }
+.chip input + span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1.5px solid #D9D9D9; border-radius: 12px; font-weight: 600; }
 .chip input:checked + span { border-color: var(--brand-red); background: #FFF0F0; }
 .chip input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 2px; }
 .order-form__submit { width: 100%; }
@@ -159,3 +159,8 @@ html.is-locked { overflow: hidden; }
 .privacy { grid-column: 1 / -1; color: #CFCFCF; font-size: .85rem; }
 .privacy summary { cursor: pointer; color: var(--brand-yellow); font-weight: 700; min-height: 44px; display: flex; align-items: center; }
 .privacy p { margin: 0 0 8px; max-width: 70ch; }
+
+/* Payment badges: real GCash wordmark, drawn cash icon */
+.pay-badge { display: inline-flex; align-items: center; gap: 8px; }
+.pay-logo { display: block; height: 18px; width: auto; }
+.pay-icon { flex: none; color: var(--success); }

@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS } from '../data/payments.js';
+import { PAYMENT_METHODS, paymentBadgeHtml } from '../data/payments.js';
 import { MESSENGER_URL, SELECT_STORE_EVENT } from '../data/contact.js';
 import { validateOrder, FIELD_ORDER, LIMITS, sanitisePhoneInput } from '../lib/validate.js';
 import { buildOrderMessage } from '../lib/order-message.js';
@@ -62,7 +62,7 @@ function markup() {
           <legend>Payment method</legend>
           <div class="chips">
             ${PAYMENT_METHODS.map((m) => `
-              <label class="chip"><input type="radio" name="payment" value="${m.id}"><span>${m.icon} ${m.short}</span></label>`).join('')}
+              <label class="chip"><input type="radio" name="payment" value="${m.id}"><span class="pay-badge">${paymentBadgeHtml(m)}</span></label>`).join('')}
           </div>
           <p class="field-error" id="err-payment"></p>
         </fieldset>

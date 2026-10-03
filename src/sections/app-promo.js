@@ -3,7 +3,7 @@ import { mountDemo } from '../demo/demo.js';
 const BENEFITS = [
   '🛒 Order in a few taps, no more typing forms',
   '🛵 Live rider tracking, from Preparing to Delivered',
-  '💳 Pay with GCash, Maya, Card or Cash on Delivery',
+  '💳 Pay with GCash or Cash on Delivery',
   '🎉 Exclusive app-only promos',
 ];
 

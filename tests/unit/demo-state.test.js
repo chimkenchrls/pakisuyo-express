@@ -14,8 +14,8 @@ describe('demo reducer: happy path', () => {
   it('walks splash → home → store → checkout → tracking → delivered', () => {
     let s = run(toCheckout);
     expect(s.screen).toBe('checkout');
-    s = run([{ type: 'OPEN_SHEET' }, { type: 'SET_PAYMENT', payment: 'maya' }, { type: 'APPLY_PROMO' }], s);
-    expect(s).toMatchObject({ payment: 'maya', sheetOpen: false, promoApplied: true });
+    s = run([{ type: 'OPEN_SHEET' }, { type: 'SET_PAYMENT', payment: 'cod' }, { type: 'APPLY_PROMO' }], s);
+    expect(s).toMatchObject({ payment: 'cod', sheetOpen: false, promoApplied: true });
     s = reducer(s, { type: 'PLACE_ORDER', orderNo: 'PX-1234' });
     expect(s).toMatchObject({ screen: 'tracking', trackingStep: 0, orderNo: 'PX-1234' });
     for (let i = 0; i < 10; i++) s = reducer(s, { type: 'ADVANCE_TRACKING' });
@@ -62,6 +62,7 @@ describe('demo reducer: button mashing (Review Focus 5)', () => {
     const s = run(toCheckout);
     expect(reducer(s, { type: 'OPEN_STORE', storeId: 'nope' })).toBe(s);
     expect(reducer(s, { type: 'SET_PAYMENT', payment: 'bitcoin' })).toBe(s);
+    expect(reducer(s, { type: 'SET_PAYMENT', payment: 'maya' })).toBe(s);
     const store = run(toCheckout.slice(0, 2));
     expect(reducer(store, { type: 'ADD_ITEM', itemId: 'nope' })).toBe(store);
   });
