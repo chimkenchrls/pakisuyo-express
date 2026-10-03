@@ -121,6 +121,12 @@ describe('buildDirectory (Review Focus 2)', () => {
     expect(ids).not.toContain('dash-extra');
   });
 
+  it('also hides entries matching a featured store alias (OSM names La Barrida differently)', () => {
+    const withAlias = [store('lb', 'La Barrida Sariaya', 'Sariaya', 'fast-food', { aliases: ['La Barrida Pizza Haus'] })];
+    const ids = buildDirectory([store('osm-n9', 'La Barrida Pizza Haus', 'Sariaya')], [], withAlias).map((s) => s.id);
+    expect(ids).toEqual(['lb']);
+  });
+
   it('keeps the same chain in another town, plus extras, sorted by name', () => {
     expect(out.slice(2).map((s) => [s.id, s.featured])).toEqual([['nena', false], ['osm-n2', false], ['osm-n3', false]]);
   });

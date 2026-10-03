@@ -43,7 +43,7 @@ describe('demo reducer: button mashing (Review Focus 5)', () => {
 
   it('opening a different store clears the cart and promo', () => {
     let s = run([...toCheckout, { type: 'APPLY_PROMO' }, { type: 'BACK' }, { type: 'BACK' }]);
-    s = reducer(s, { type: 'OPEN_STORE', storeId: 'mcdonalds-sariaya' });
+    s = reducer(s, { type: 'OPEN_STORE', storeId: 'labarrida-sariaya' });
     expect(s.cart.lines).toEqual([]);
     expect(s.promoApplied).toBe(false);
   });
@@ -76,9 +76,10 @@ describe('demo reducer: button mashing (Review Focus 5)', () => {
 describe('visibleStores', () => {
   it('filters by category and by search over names and menu items', () => {
     const base = { ...initialState(), screen: 'home' };
-    expect(visibleStores({ ...base, category: 'cafe' }).map((s) => s.id)).toEqual(['dunkin-sariaya', 'dash-espresso-sariaya']);
+    expect(visibleStores({ ...base, category: 'cafe' }).map((s) => s.id)).toEqual(['kope-right', 'dash-espresso-sariaya']);
     expect(visibleStores({ ...base, query: 'spaghetti' }).map((s) => s.id)).toEqual(['jollibee-sariaya']);
-    expect(visibleStores({ ...base, query: '  DUNKIN ' }).map((s) => s.id)).toEqual(['dunkin-sariaya']);
+    expect(visibleStores({ ...base, query: '  kope-right ' }).map((s) => s.id)).toEqual(['kope-right']);
+    expect(visibleStores({ ...base }).map((s) => s.id)[0]).toBe('jollibee-sariaya'); // demo keeps Jollibee first
     expect(visibleStores({ ...base, query: 'zzz' })).toEqual([]);
   });
 });

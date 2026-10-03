@@ -4,5 +4,10 @@ dist/
 test-results/
 playwright-report/
 research/
-lighthouse*.json
-lighthouse*.html
+lighthouse.json
+lighthouse-*.json
+lighthouse*.report.html
+.netlify/
+# Pitch-only third-party brand images: kept locally, never committed (repo is public)
+public/assets/stores/jollibee-sariaya/
+.lighthouseci/

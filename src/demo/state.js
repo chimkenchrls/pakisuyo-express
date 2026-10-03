@@ -1,4 +1,4 @@
-import { STORES, getStore } from '../data/stores.js';
+import { DEMO_STORES, getStore } from '../data/stores.js';
 import { PAYMENT_METHODS } from '../data/payments.js';
 import { emptyCart, addItem, removeItem, itemCount } from '../lib/cart.js';
 
@@ -75,7 +75,7 @@ export function reducer(state, action) {
   }
 }
 
-export function visibleStores(state, stores = STORES) {
+export function visibleStores(state, stores = DEMO_STORES) {
   const q = state.query.trim().toLowerCase();
   return stores.filter((s) => (state.category === 'all' || s.category === state.category)
     && (!q

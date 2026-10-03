@@ -24,7 +24,7 @@ describe('images', () => {
   });
 
   it('falls back to initials for featured stores without a logo', () => {
-    expect(storeImageHtml(getStore('mcdonalds-sariaya'), 'logo')).toContain('>MC<');
+    expect(storeImageHtml({ id: 'no-logo', name: 'Test Store', initials: 'TS', color: '#000', textColor: '#fff' }, 'logo')).toContain('>TS<');
   });
 
   it('gives directory stores a category icon tile', () => {

@@ -32,7 +32,7 @@ test('stores without a menu point back to the demo store', async ({ page }) => {
   await page.goto('/#app');
   const demo = page.getByTestId('demo-screen');
   await demo.scrollIntoViewIfNeeded(); // splash waits until the phone is actually on screen
-  await demo.getByRole('button', { name: /McDonald's Sariaya/ }).click();
+  await demo.getByRole('button', { name: /La Barrida Sariaya/ }).click();
   await expect(demo.getByText('Menu coming soon for this store.')).toBeVisible();
   await demo.getByRole('button', { name: 'Try Jollibee Sariaya' }).click();
   await expect(demo.getByText('Prices from jollibee.com.ph · may differ in-store')).toBeVisible();

@@ -17,7 +17,7 @@ test.describe('page', () => {
     await page.goto('/');
     const cards = page.locator('#restaurants .store-card');
     await expect(cards).toHaveCount(5);
-    await expect(cards).toContainText(['Jollibee Sariaya', "McDonald's Sariaya", "Dunkin' Sariaya", 'Wings & Dims Corner', 'Dash Espresso']);
+    await expect(cards).toContainText(['La Barrida Sariaya', 'Bukid Amyr Restaurant', 'KOPE-RIGHT', 'Wings & Dims Corner', 'Dash Espresso']);
   });
 
   test('mobile menu opens and closes', async ({ page }) => {

@@ -16,10 +16,10 @@ test('Browse all opens the sheet at #stores with search focused', async ({ page 
   await expect(sheet).toBeVisible();
   await expect(page).toHaveURL(/#stores$/);
   await expect(sheet.getByLabel('Search stores')).toBeFocused();
-  // featured 5 + OSM kept (Jollibee Lucena, Sariaya Bread House, Don Lauro's, Libra Bakery, Lugaw Queen) = 10;
-  // OSM "Jollibee" in Sariaya and both extras are hidden behind featured cards.
-  await expect(rows(page)).toHaveCount(10);
-  await expect(sheet.getByText('10 stores')).toBeVisible();
+  // featured 5 + all 6 fixture OSM stores (Jollibee is no longer featured, so both Jollibees show) = 11;
+  // the hand-added extras are hidden behind their featured cards.
+  await expect(rows(page)).toHaveCount(11);
+  await expect(sheet.getByText('11 stores')).toBeVisible();
 });
 
 test('filters by town and type, keeps focus while typing, and orders from a row', async ({ page }) => {
@@ -105,12 +105,12 @@ test('store combobox works with the keyboard only (Review Focus 4)', async ({ pa
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen (Lucena)');
 });
 
-test('picking a featured store keeps its name as is', async ({ page }) => {
+test('picking a featured store adds its town for the dispatcher', async ({ page }) => {
   await page.goto('/#order');
   const combo = page.getByRole('combobox', { name: /Store/ });
-  await combo.pressSequentially('jollibee');
-  await page.getByRole('option', { name: /Jollibee Sariaya/ }).click();
-  await expect(combo).toHaveValue('Jollibee Sariaya');
+  await combo.pressSequentially('kope');
+  await page.getByRole('option', { name: /KOPE-RIGHT/ }).click();
+  await expect(combo).toHaveValue('KOPE-RIGHT (Sariaya)');
 });
 
 test('store suggestions recover after a failed load (patchy data)', async ({ page }) => {
@@ -159,8 +159,8 @@ test.describe('store field shows the list', () => {
     await page.goto('/#order');
     await page.getByRole('combobox', { name: /Store/ }).click();
     const options = page.getByRole('option');
-    await expect(options).toHaveCount(10); // fixture: featured 5 + 5 OSM stores
-    await expect(options.first()).toContainText('Jollibee Sariaya');
+    await expect(options).toHaveCount(11); // fixture: featured 5 + 6 OSM stores
+    await expect(options.first()).toContainText('La Barrida Sariaya');
     await expect(page.getByRole('option', { name: /as typed/ })).toHaveCount(0);
     await page.getByRole('option', { name: /Libra Bakery/ }).click();
     await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('Libra Bakery (Lucena)');

@@ -12,8 +12,9 @@ const ROOT = new URL('../public/assets/', import.meta.url);
 // Neither set = skip, and the page falls back to a tile.
 const TARGETS = [
   { kind: 'stores', id: 'jollibee-sariaya', file: 'stores/jollibee-sariaya/logo', title: 'File:Jollibee 2011 wordmark.svg' },
-  { kind: 'stores', id: 'mcdonalds-sariaya', file: 'stores/mcdonalds-sariaya/logo', title: "File:McDonald's Golden Arches.svg" },
-  { kind: 'stores', id: 'dunkin-sariaya', file: 'stores/dunkin-sariaya/logo', title: "File:Dunkin' logo.svg" },
+  { kind: 'stores', id: 'labarrida-sariaya', file: 'stores/labarrida-sariaya/logo' },
+  { kind: 'stores', id: 'bukid-amyr', file: 'stores/bukid-amyr/logo' },
+  { kind: 'stores', id: 'kope-right', file: 'stores/kope-right/logo' },
   { kind: 'stores', id: 'wings-dims-sariaya', file: 'stores/wings-dims-sariaya/logo' },
   { kind: 'stores', id: 'dash-espresso-sariaya', file: 'stores/dash-espresso-sariaya/logo' },
   { kind: 'items', id: 'chickenjoy-rice', file: 'stores/jollibee-sariaya/items/chickenjoy-rice', credit: 'official product photo from jollibee.com.ph (private pitch only)' },

@@ -71,8 +71,8 @@ test('falls back to a copy dialog when the clipboard is blocked', async ({ page 
 
 test('tapping a featured card fills the store', async ({ page }) => {
   await page.goto('/');
-  await page.locator('#restaurants .store-card', { hasText: "Dunkin' Sariaya" }).click();
-  await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue("Dunkin' Sariaya");
+  await page.locator('#restaurants .store-card', { hasText: 'KOPE-RIGHT' }).click();
+  await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue('KOPE-RIGHT');
 });
 
 test.describe('location', () => {

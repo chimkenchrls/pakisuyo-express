@@ -15,9 +15,11 @@
     "fetch:boundary": "node scripts/fetch-boundary.mjs",
     "fetch:images": "node scripts/fetch-images.mjs",
     "export:logos": "node scripts/export-logos.mjs",
-    "fetch:stores": "node scripts/fetch-stores.mjs"
+    "fetch:stores": "node scripts/fetch-stores.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@phosphor-icons/core": "^2.1.1",
     "@playwright/test": "^1.63.0",
     "vite": "^8.3.2",

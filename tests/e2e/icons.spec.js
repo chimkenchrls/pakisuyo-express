@@ -32,7 +32,7 @@ test('no emoji or symbol glyphs on the page, in the store panel, or in the app d
   await expect(page.locator('.how svg.icon')).toHaveCount(4);
 
   await page.getByRole('button', { name: /Browse all \d+ stores/ }).click();
-  await expect(page.locator('.dir-row')).toHaveCount(10);
+  await expect(page.locator('.dir-row')).toHaveCount(11);
   expect(await visibleGlyphs(page)).toEqual([]);
   await page.keyboard.press('Escape');
 

@@ -53,11 +53,14 @@ export function fromOsmElement(el, towns) {
   return { id: `osm-${el.type[0]}${el.id}`, name, category, town, lat: round5(lat), lng: round5(lng) };
 }
 
-// A featured store's name, with and without its trailing town ("Jollibee Sariaya" → also "jollibee").
+// A store's names, with and without the trailing town ("Jollibee Sariaya" → also "jollibee"),
+// plus any aliases (e.g. its name on OpenStreetMap).
 function nameKeys(s) {
-  const name = normaliseName(s.name);
   const town = normaliseName(s.town);
-  return name.endsWith(` ${town}`) ? [name, name.slice(0, -town.length - 1)] : [name];
+  return [s.name, ...(s.aliases ?? [])].flatMap((n) => {
+    const name = normaliseName(n);
+    return name.endsWith(` ${town}`) ? [name, name.slice(0, -town.length - 1)] : [name];
+  });
 }
 
 export function buildDirectory(osmStores, extraStores, featuredStores) {
