@@ -62,9 +62,14 @@ npm run export:logos     # logo PNGs incl. 1080×1080 Facebook profile picture
 
 ## Deploying
 
-Netlify is configured in `netlify.toml` (the site sends `noindex`). Deploying publishes a public URL, so only do it once the owner pitch link is approved:
+**Pitch site (for the owner): https://pakisuyoexpress.netlify.app**, private link with brand logos and `noindex`.
+Upload a local pitch build as-is (Netlify must not rebuild it, or it would become the public version):
 
 ```bash
-npx netlify-cli deploy --build            # draft URL
-npx netlify-cli deploy --build --prod     # production URL
+npm run build:pitch
+npx netlify-cli deploy --prod --dir dist --no-build --site pakisuyoexpress
 ```
+
+**Public launch (later):** run `npm run build` (no brand logos or photos, indexable) and deploy it the same way,
+ideally to the owner's own domain (see "Connecting a domain" above). `netlify.toml` builds the public version
+if the site is ever connected to GitHub for automatic deploys.

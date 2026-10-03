@@ -6,3 +6,4 @@ playwright-report/
 research/
 lighthouse*.json
 lighthouse*.html
+.netlify/
