@@ -1,4 +1,4 @@
-# Pakisuyo Express Sariaya — pitch landing page
+# Pakisuyo Express Sariaya: pitch landing page
 
 Mobile-first landing page for Pakisuyo Express Sariaya: a working Messenger order form with a map pin, and a tap-through preview of the future delivery app.
 
@@ -25,7 +25,7 @@ One codebase, two builds:
 | Search engines | blocked (`noindex`) | allowed |
 
 The switch lives in `.env.pitch` (`VITE_PITCH=true`); the protected images are listed in `src/lib/brand-assets.js`.
-Wings & Dims and Dash Espresso logos appear in both — get those stores' OK before launch.
+Wings & Dims and Dash Espresso logos appear in both, so get those stores' OK before launch.
 
 ## Editing content
 
@@ -40,7 +40,7 @@ Wings & Dims and Dash Espresso logos appear in both — get those stores' OK bef
 - To use your own photo, save it as `public/assets/stores/jollibee-sariaya/items/<item-id>.png` and run `npm run fetch:images` (your files always win).
 - Anything missing falls back to an initials or emoji tile automatically.
 - Credits: `public/assets/CREDITS.md`.
-- Directory stores without a logo show a category icon. All store pictures go through `storeImageHtml()` in `src/lib/images.js` — the one place to add Google Places photos later.
+- Directory stores without a logo show a category icon. All store pictures go through `storeImageHtml()` in `src/lib/images.js`, the one place to add Google Places photos later.
 
 > **Brand logos and brand food photos are for the private pitch only.** Swap them for owner-owned or stock images before any public launch. Only files change, no code.
 
@@ -58,7 +58,7 @@ npm run export:logos     # logo PNGs incl. 1080×1080 Facebook profile picture
 1. Buy the domain (any registrar; `.com` ≈ ₱700–1,000/year).
 2. Netlify → the site → **Domain management → Add a domain** → enter it.
 3. At the registrar, either switch the nameservers to the ones Netlify shows (easiest), or add the `A`/`CNAME` records it lists.
-4. Wait for DNS (minutes to a few hours); Netlify issues the free HTTPS certificate automatically — HTTPS is required for "Use my current location".
+4. Wait for DNS (minutes to a few hours); Netlify issues the free HTTPS certificate automatically. HTTPS is required for "Use my current location".
 
 ## Deploying
 

@@ -118,7 +118,7 @@ test('the delivery fee line follows the chosen store', async ({ page }) => {
   await expect(fee).toHaveText(/₱ 50 within Sariaya · out-of-town stores/);
   await store(page).pressSequentially('lugaw');
   await page.getByRole('option', { name: /Lugaw Queen/ }).click();
-  await expect(fee).toHaveText('Out-of-town fee — confirmed by our team');
+  await expect(fee).toHaveText('Out-of-town fee: confirmed by our team');
   await store(page).fill('Aling Nena Bakery');
   await expect(fee).toHaveText('Delivery fee: ₱ 50 within Sariaya');
 });

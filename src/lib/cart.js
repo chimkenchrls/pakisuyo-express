@@ -30,7 +30,7 @@ export function totals(cart, store, { promoApplied = false } = {}) {
     feeKnown,
     discount,
     total: subtotal + fee - discount,
-    feeLabel: feeKnown ? 'Delivery fee (within Sariaya)' : 'Out-of-town fee — confirmed by our team',
+    feeLabel: feeKnown ? 'Delivery fee (within Sariaya)' : 'Out-of-town fee: confirmed by our team',
     totalLabel: feeKnown ? 'Total' : 'Total (excl. delivery)',
   };
 }

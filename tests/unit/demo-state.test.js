@@ -10,7 +10,7 @@ const toCheckout = [
   { type: 'GO_CHECKOUT' },
 ];
 
-describe('demo reducer — happy path', () => {
+describe('demo reducer: happy path', () => {
   it('walks splash → home → store → checkout → tracking → delivered', () => {
     let s = run(toCheckout);
     expect(s.screen).toBe('checkout');
@@ -24,7 +24,7 @@ describe('demo reducer — happy path', () => {
   });
 });
 
-describe('demo reducer — button mashing (Review Focus 5)', () => {
+describe('demo reducer: button mashing (Review Focus 5)', () => {
   it('a second PLACE_ORDER is a no-op (same object)', () => {
     const placed = reducer(run(toCheckout), { type: 'PLACE_ORDER', orderNo: 'PX-1' });
     expect(reducer(placed, { type: 'PLACE_ORDER', orderNo: 'PX-2' })).toBe(placed);

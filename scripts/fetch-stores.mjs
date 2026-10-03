@@ -49,7 +49,7 @@ async function overpass(q) {
       console.warn(`${url} → ${err.message}${err.cause ? ` (${err.cause.code ?? err.cause.message})` : ''}`);
     }
   }
-  throw new Error('No Overpass server answered — try again in a few minutes.');
+  throw new Error('No Overpass server answered. Try again in a few minutes.');
 }
 
 const elements = await overpass(query);

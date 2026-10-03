@@ -27,7 +27,7 @@ function markup() {
     <div class="container order__inner">
       <div class="order__intro">
         <h2 class="section-title">Place your order</h2>
-        <p class="section-lead">Fill this in and we'll copy it for you — just paste it in Messenger and hit send.</p>
+        <p class="section-lead">Fill this in and we'll copy it for you. Just paste it in Messenger and hit send.</p>
       </div>
       <form class="order-form" novalidate>
         ${field('name', 'Name', control('input', 'name', 'autocomplete="name"'))}
@@ -35,9 +35,9 @@ function markup() {
         <fieldset class="field field--map">
           <legend>Delivery location</legend>
           <button type="button" class="btn btn--ghost" data-action="locate">📍 Use my current location</button>
-          <div class="order-map" id="order-map" aria-label="Map — tap to drop a pin on your location"></div>
+          <div class="order-map" id="order-map" aria-label="Map: tap to drop a pin on your location"></div>
           <p class="hint" id="map-status" aria-live="polite">Tap the map to drop a pin. You can drag it to your exact gate.</p>
-          <p class="warning" id="area-warning" hidden>Looks like you're outside our delivery area — message us to check.</p>
+          <p class="warning" id="area-warning" hidden>Looks like you're outside our delivery area. Message us to check.</p>
         </fieldset>
         ${field('address', 'Exact Address', control('input', 'address', 'autocomplete="street-address"'))}
         ${field('landmark', 'Landmark', control('input', 'landmark', 'placeholder="e.g. Blue gate beside the chapel"'))}
@@ -74,7 +74,7 @@ function markup() {
         </div>
         <button type="submit" class="btn btn--primary order-form__submit">Send Order</button>
         <p class="hint">Payment is settled with our team in Messenger. Nothing is charged here.</p>
-        <p class="hint">Your details are only used for this delivery. If you tick “Remember”, they're saved on this phone only — we don't store them anywhere else.</p>
+        <p class="hint">Your details are only used for this delivery. If you tick “Remember”, they're saved on this phone only. We don't store them anywhere else.</p>
       </form>
     </div>
     <div class="toast" role="status" aria-live="polite" hidden></div>
@@ -126,7 +126,7 @@ export function renderOrderForm(el) {
         }
         lastAutofilled = next.lastAutofilled;
         statusEl.textContent = next.lookupFailed
-          ? "Couldn't look up address — please type it."
+          ? "Couldn't look up the address. Please type it."
           : 'Pin set. Drag it if it’s not exactly at your gate.';
       }, 800);
     },

@@ -71,7 +71,7 @@ test('says so when the store list cannot load (Review Focus 3)', async ({ page }
   await page.unroute('**/data/directory.json');
   await page.route('**/data/directory.json', (r) => r.abort());
   await page.goto('/#stores');
-  await expect(page.getByText("Couldn't load the store list — type any store in the order form.")).toBeVisible();
+  await expect(page.getByText("Couldn't load the store list. Type any store in the order form.")).toBeVisible();
 });
 
 async function fillRest(page) {

@@ -1,5 +1,5 @@
 const STEPS = [
-  ['🏪', 'Choose your store', 'Pick from our featured restaurants — or any store you like.'],
+  ['🏪', 'Choose your store', 'Pick from our featured stores, or any store you like.'],
   ['📝', 'Place your order', 'Fill in the order form. We copy it for you to send on Messenger.'],
   ['💳', 'Pay your way', 'Cash on Delivery, GCash, Maya or Card.'],
   ['🛵', 'Track your rider', 'We keep you posted from Preparing to Out for Delivery.'],

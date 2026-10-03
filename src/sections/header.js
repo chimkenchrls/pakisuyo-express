@@ -11,7 +11,7 @@ export function renderHeader(el) {
   el.className = 'site-header';
   el.innerHTML = `
     <div class="container site-header__inner">
-      <a href="#hero" class="site-header__brand" aria-label="Pakisuyo Express — back to top">${logoHorizontal({ size: 36 })}</a>
+      <a href="#hero" class="site-header__brand" aria-label="Pakisuyo Express, back to top">${logoHorizontal({ size: 36 })}</a>
       <nav class="site-nav" id="site-nav" aria-label="Main">
         ${LINKS.map(([href, label]) => `<a href="${href}">${label}</a>`).join('')}
       </nav>

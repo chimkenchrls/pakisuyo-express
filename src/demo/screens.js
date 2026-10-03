@@ -8,8 +8,8 @@ import { visibleStores, isTrackingDone, TRACKING_STEPS, DEMO_STORE_ID } from './
 
 export const CAPTIONS = {
   splash: 'Your brand, front and centre.',
-  home: 'Replaces: “Available po ba si Jollibee?” — every store shows if it’s open.',
-  store: 'Replaces: food posts on Facebook — now a menu customers can order from.',
+  home: 'Replaces: “Available po ba si Jollibee?” Now every store shows if it’s open.',
+  store: 'Replaces: food posts on Facebook. Now it’s a menu customers can order from.',
   checkout: 'Replaces: typing out the order form and forwarding GCash details.',
   tracking: 'Replaces: “Preparing… Out for delivery…” messages sent by hand.',
 };
@@ -97,7 +97,7 @@ function checkout(state) {
   const t = totals(state.cart, store, { promoApplied: state.promoApplied });
   const method = PAYMENT_METHODS.find((m) => m.id === state.payment);
   const promo = !t.feeKnown ? '' : state.promoApplied
-    ? `<p class="ds-promo is-applied">✅ ${PROMO.code} applied — ₱${PROMO.discount} off delivery</p>`
+    ? `<p class="ds-promo is-applied">✅ ${PROMO.code} applied: ₱${PROMO.discount} off delivery</p>`
     : `<button type="button" class="ds-promo" data-action="APPLY_PROMO">🎉 First order? Use code <b>${PROMO.code}</b> for ₱${PROMO.discount} off delivery. <u>Apply</u></button>`;
 
   return `
@@ -120,7 +120,7 @@ function checkout(state) {
         ${state.cart.lines.map((l) => `<div class="ds-row ds-line"><span>${l.qty}x ${escapeHtml(l.name)}</span><span>${peso(l.price * l.qty)}</span></div>`).join('')}
         <div class="ds-totals">
           <div class="ds-row ds-muted"><span>Subtotal</span><span>${peso(t.subtotal)}</span></div>
-          <div class="ds-row ds-muted"><span>${t.feeLabel}</span><span>${t.feeKnown ? peso(t.fee) : '—'}</span></div>
+          <div class="ds-row ds-muted"><span>${t.feeLabel}</span><span>${t.feeKnown ? peso(t.fee) : 'TBC'}</span></div>
           ${t.discount ? `<div class="ds-row ds-discount"><span>Promo (${PROMO.code})</span><span>−${peso(t.discount)}</span></div>` : ''}
           <div class="ds-row ds-total"><span>${t.totalLabel}</span><span>${peso(t.total)}</span></div>
         </div>

@@ -88,7 +88,7 @@ describe('shouldAutofill', () => {
 
   it('never overwrites what the customer typed', () => {
     expect(shouldAutofill('Purok 3, blue gate', null)).toBe(false);
-    expect(shouldAutofill('Rizal St, Sariaya — 2nd floor', 'Rizal St, Sariaya')).toBe(false);
+    expect(shouldAutofill('Rizal St, Sariaya, 2nd floor', 'Rizal St, Sariaya')).toBe(false);
   });
 });
 

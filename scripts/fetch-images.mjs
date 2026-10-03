@@ -53,7 +53,7 @@ for (const t of TARGETS) {
     const ownExt = await findOwnFile(t.file);
     if (ownExt) {
       manifest[t.kind][t.id] = `/assets/${t.file}.${ownExt}`;
-      credits.push(`- \`${t.file}.${ownExt}\` — supplied by the project owner (private pitch only)`);
+      credits.push(`- \`${t.file}.${ownExt}\` · supplied by the project owner (private pitch only)`);
       console.log(`✓ ${t.id}: using owner-supplied file`);
     }
     continue;
@@ -61,7 +61,7 @@ for (const t of TARGETS) {
 
   const hit = await findOnCommons(t);
   if (!hit) {
-    console.warn(`✗ ${t.id}: nothing found for "${t.title ?? t.search}" — the page will use a fallback tile`);
+    console.warn(`✗ ${t.id}: nothing found for "${t.title ?? t.search}"; the page will use a fallback tile`);
     continue;
   }
   const src = hit.info.thumburl ?? hit.info.url;
@@ -76,7 +76,7 @@ for (const t of TARGETS) {
   await writeFile(out, Buffer.from(await img.arrayBuffer()));
   manifest[t.kind][t.id] = `/assets/${t.file}.${ext}`;
   const meta = hit.info.extmetadata ?? {};
-  credits.push(`- \`${t.file}.${ext}\` — [${hit.title}](${hit.info.descriptionurl}) · ${stripHtml(meta.Artist?.value) || 'unknown author'} · ${meta.LicenseShortName?.value ?? 'see source'}`);
+  credits.push(`- \`${t.file}.${ext}\` · [${hit.title}](${hit.info.descriptionurl}) · ${stripHtml(meta.Artist?.value) || 'unknown author'} · ${meta.LicenseShortName?.value ?? 'see source'}`);
   console.log(`✓ ${t.id}: ${hit.title}`);
   await sleep(500);
 }
@@ -85,7 +85,7 @@ await writeFile(new URL('../src/data/images.json', import.meta.url), `${JSON.str
 await writeFile(new URL('CREDITS.md', ROOT), [
   '# Image credits',
   '',
-  'Brand logos and brand food photos are for the private pitch only — replace them before any public launch (spec §9).',
+  'Brand logos and brand food photos are for the private pitch only. Replace them before any public launch (spec §9).',
   '',
   ...credits,
   '',

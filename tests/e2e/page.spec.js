@@ -36,7 +36,7 @@ test.describe('hours badge uses Manila time on a foreign device', () => {
   test('9PM in Manila is closed even though it is morning in LA', async ({ page }) => {
     await page.clock.setFixedTime(new Date('2026-10-03T13:00:00Z')); // 21:00 Manila, 06:00 LA
     await page.goto('/');
-    await expect(page.getByTestId('hours-badge')).toContainText('Closed now — opens 8AM');
+    await expect(page.getByTestId('hours-badge')).toContainText('Closed now · Opens 8AM');
   });
 
   test('10AM in Manila is open even though it is evening in LA', async ({ page }) => {

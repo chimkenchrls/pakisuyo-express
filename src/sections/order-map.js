@@ -23,7 +23,7 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin, initialPin =
         failed += 1;
         if (!loaded && failed >= 3) {
           mapEl.hidden = true;
-          statusEl.textContent = "The map couldn't load — just type your address and landmark below.";
+          statusEl.textContent = "The map couldn't load. Just type your address and landmark below.";
         }
       });
       map.on('click', (e) => setPin(e.latlng.lat, e.latlng.lng));
@@ -77,14 +77,14 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin, initialPin =
 
   function locate() {
     if (!('geolocation' in navigator)) {
-      statusEl.textContent = "Your browser can't share location — tap the map to drop a pin instead.";
+      statusEl.textContent = "Your browser can't share location. Tap the map to drop a pin instead.";
       return;
     }
     statusEl.textContent = 'Finding you…';
     navigator.geolocation.getCurrentPosition(
       (pos) => setPin(pos.coords.latitude, pos.coords.longitude, { pan: true }),
       () => {
-        statusEl.textContent = "Couldn't get your location — tap the map to drop a pin instead.";
+        statusEl.textContent = "Couldn't get your location. Tap the map to drop a pin instead.";
         ensure();
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },

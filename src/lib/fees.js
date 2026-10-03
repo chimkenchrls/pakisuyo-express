@@ -9,5 +9,5 @@ const HOME_FEE = `Delivery fee: ${peso(SARIAYA_DELIVERY_FEE)} within ${HOME_TOWN
 export function deliveryFeeHint(store) {
   const words = ` ${normaliseName(store)} `;
   if (!words.trim()) return `${HOME_FEE} · out-of-town stores: fee confirmed by our team`;
-  return OTHER_TOWNS.some((town) => words.includes(` ${town} `)) ? 'Out-of-town fee — confirmed by our team' : HOME_FEE;
+  return OTHER_TOWNS.some((town) => words.includes(` ${town} `)) ? 'Out-of-town fee: confirmed by our team' : HOME_FEE;
 }

@@ -17,6 +17,6 @@ describe('hours', () => {
   ])('%s → open=%s', (iso, isOpen) => {
     const status = getHoursStatus(new Date(iso));
     expect(status.isOpen).toBe(isOpen);
-    expect(status.label).toBe(isOpen ? 'Open today 8AM–7PM' : 'Closed now — opens 8AM');
+    expect(status.label).toBe(isOpen ? 'Open today 8AM–7PM' : 'Closed now · Opens 8AM');
   });
 });

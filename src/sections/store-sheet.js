@@ -64,7 +64,7 @@ export function mountStoreSheet({ returnFocus }) {
 
   function renderList() {
     if (failed) {
-      countEl.textContent = "Couldn't load the store list — type any store in the order form.";
+      countEl.textContent = "Couldn't load the store list. Type any store in the order form.";
       listEl.innerHTML = '';
       moreBtn.hidden = true;
       return;
@@ -76,7 +76,7 @@ export function mountStoreSheet({ returnFocus }) {
     const results = searchStores(stores, state);
     countEl.textContent = results.length
       ? `${results.length} ${results.length === 1 ? 'store' : 'stores'}`
-      : `No stores match “${state.query}”. You can still type it in the order form — we'll pick up from there.`;
+      : `No stores match “${state.query}”. You can still type it in the order form and we'll pick it up from there.`;
     listEl.innerHTML = results.slice(0, state.shown).map(rowHtml).join('');
     moreBtn.hidden = results.length <= state.shown;
   }

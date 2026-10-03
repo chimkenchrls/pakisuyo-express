@@ -12,9 +12,9 @@ describe('deliveryFeeHint', () => {
   });
 
   it('flags stores from other towns', () => {
-    expect(deliveryFeeHint('Jollibee (Lucena)')).toBe('Out-of-town fee — confirmed by our team');
-    expect(deliveryFeeHint('libra bakery lucena')).toBe('Out-of-town fee — confirmed by our team');
-    expect(deliveryFeeHint('Tayabas Pasalubong')).toBe('Out-of-town fee — confirmed by our team');
+    expect(deliveryFeeHint('Jollibee (Lucena)')).toBe('Out-of-town fee: confirmed by our team');
+    expect(deliveryFeeHint('libra bakery lucena')).toBe('Out-of-town fee: confirmed by our team');
+    expect(deliveryFeeHint('Tayabas Pasalubong')).toBe('Out-of-town fee: confirmed by our team');
   });
 
   it("doesn't mistake words that merely contain a town name", () => {

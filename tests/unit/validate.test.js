@@ -91,7 +91,7 @@ describe('parseChangeFor (COD change)', () => {
   });
 });
 
-describe('validateOrder — change for COD', () => {
+describe('validateOrder: change for COD', () => {
   it('is optional', () => {
     expect(validateOrder({ ...VALID, payment: 'cod', changeFor: '' }).valid).toBe(true);
   });
