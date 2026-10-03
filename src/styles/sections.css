@@ -102,3 +102,38 @@
 .eyebrow { display: inline-block; background: var(--ink); color: var(--brand-yellow); font-weight: 800; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; border-radius: var(--radius-pill); padding: 6px 12px; margin-bottom: 12px; }
 .benefits { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .benefits li { background: var(--surface); border-radius: 14px; padding: 12px 14px; font-weight: 600; }
+
+/* Browse all + store sheet */
+.restaurants__browse { display: grid; justify-items: start; gap: 8px; margin-top: 20px; }
+.browse-btn { background: var(--ink); color: var(--brand-yellow); }
+.browse-btn:hover { background: #000; }
+.restaurants__note { margin: 0; color: var(--ink-muted); font-size: .85rem; }
+html.is-locked { overflow: hidden; }
+.store-sheet { position: fixed; inset: 0; z-index: 80; background: var(--surface); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; animation: sheet-in .2s ease-out; }
+.store-sheet[hidden] { display: none; }
+@keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
+.store-sheet__head { position: sticky; top: 0; z-index: 1; background: var(--brand-yellow); padding: 12px var(--gutter) 10px; }
+.store-sheet__title-row { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-w); margin: 0 auto; }
+.store-sheet__title { margin: 0; font-size: 1.3rem; font-weight: 800; letter-spacing: -.02em; }
+.store-sheet__close { width: 44px; height: 44px; border: 0; background: transparent; font-size: 1.2rem; cursor: pointer; }
+.store-sheet__search { position: relative; max-width: var(--max-w); margin: 8px auto 0; }
+.store-sheet__search input { width: 100%; min-height: 46px; border: 0; border-radius: var(--radius-pill); padding: 10px 150px 10px 16px; background: var(--surface); }
+.store-sheet__town { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); max-width: 140px; min-height: 34px; border: 0; border-radius: var(--radius-pill); padding: 4px 12px; background: var(--ink); color: var(--brand-yellow); font-weight: 700; font-size: .85rem; cursor: pointer; }
+.store-sheet__chips { display: flex; gap: 6px; overflow-x: auto; max-width: var(--max-w); margin: 10px auto 0; padding-bottom: 2px; scrollbar-width: none; }
+.store-sheet__chips::-webkit-scrollbar { display: none; }
+@media (min-width: 860px) { .store-sheet__chips { flex-wrap: wrap; overflow: visible; } }
+.store-sheet__chip { flex: none; min-height: 36px; border: 0; border-radius: var(--radius-pill); padding: 6px 14px; background: var(--surface); font-weight: 600; cursor: pointer; }
+.store-sheet__chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.store-sheet__count, .store-sheet__list, .store-sheet__more, .store-sheet__foot { width: 100%; max-width: var(--max-w); margin-left: auto; margin-right: auto; }
+.store-sheet__count { margin-top: 0; margin-bottom: 0; padding: 10px var(--gutter); color: var(--ink-muted); font-size: .9rem; border-bottom: 1px solid var(--line); }
+.store-sheet__list { list-style: none; margin-top: 0; margin-bottom: 0; padding: 0; }
+.dir-row { display: flex; align-items: center; gap: 12px; padding: 10px var(--gutter); border-bottom: 1px solid var(--line); }
+.dir-row__img { width: 44px; height: 44px; border-radius: 12px; object-fit: contain; font-size: 1.3rem; flex: none; background: var(--surface); }
+.dir-row__text { flex: 1; min-width: 0; display: grid; }
+.dir-row__name { overflow-wrap: anywhere; }
+.dir-row__meta { color: var(--ink-muted); font-size: .85rem; }
+.dir-row__order { flex: none; min-height: 40px; border: 0; background: none; color: var(--brand-red); font-weight: 800; cursor: pointer; padding: 0 4px; }
+.badge { display: inline-block; vertical-align: middle; margin-left: 4px; background: var(--brand-yellow); color: var(--ink); border-radius: 6px; padding: 0 6px; font-size: .7rem; font-weight: 800; }
+.store-sheet__more { display: block; width: auto; margin: 14px auto; }
+.store-sheet__more[hidden] { display: none; }
+.store-sheet__foot { margin-top: auto; padding: 14px var(--gutter) 20px; color: var(--ink-muted); font-size: .8rem; }

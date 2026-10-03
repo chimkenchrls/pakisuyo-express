@@ -1,0 +1,11 @@
+{
+  "meta": { "source": "fixture", "fetched": "2026-10-03", "count": 6 },
+  "stores": [
+    { "id": "osm-n1", "name": "Jollibee", "category": "fast-food", "town": "Sariaya", "lat": 13.96, "lng": 121.52 },
+    { "id": "osm-n2", "name": "Jollibee", "category": "fast-food", "town": "Lucena", "lat": 13.93, "lng": 121.61 },
+    { "id": "osm-n3", "name": "Sariaya Bread House", "category": "bakery", "town": "Sariaya", "lat": 13.96, "lng": 121.52 },
+    { "id": "osm-n4", "name": "Don Lauro's Restaurant", "category": "restaurant", "town": "Sariaya", "lat": 13.96, "lng": 121.52 },
+    { "id": "osm-n5", "name": "Libra Bakery", "category": "bakery", "town": "Lucena", "lat": 13.93, "lng": 121.61 },
+    { "id": "osm-n6", "name": "Lugaw Queen", "category": "fast-food", "town": "Lucena", "lat": 13.93, "lng": 121.61 }
+  ]
+}
