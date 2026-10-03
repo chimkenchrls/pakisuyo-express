@@ -1,0 +1,11 @@
+{
+  "stores": {
+    "jollibee-sariaya": "/assets/stores/jollibee-sariaya/logo.png",
+    "mcdonalds-sariaya": "/assets/stores/mcdonalds-sariaya/logo.png",
+    "dunkin-sariaya": "/assets/stores/dunkin-sariaya/logo.png"
+  },
+  "items": {
+    "chickenjoy-rice": "/assets/stores/jollibee-sariaya/items/chickenjoy-rice.jpg",
+    "jolly-spaghetti": "/assets/stores/jollibee-sariaya/items/jolly-spaghetti.jpg"
+  }
+}
