@@ -15,7 +15,7 @@ describe('loadDirectory', () => {
     await loadDirectory({ fetchFn });
     expect(fetchFn).toHaveBeenCalledTimes(1);
     expect(fetchFn).toHaveBeenCalledWith('/data/directory.json', expect.objectContaining({ signal: expect.anything() }));
-    expect(list[0]).toMatchObject({ id: 'jollibee-sariaya', featured: true });
+    expect(list[0]).toMatchObject({ id: 'labarrida-sariaya', featured: true });
     expect(list.map((s) => s.id)).toContain('osm-n1');
   });
 

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { visibleManifest, BRAND_PROTECTED } from '../../src/lib/brand-assets.js';
 
 const manifest = {
-  stores: { 'jollibee-sariaya': '/a.png', 'wings-dims-sariaya': '/w.jpg', 'dunkin-sariaya': '/d.png' },
+  stores: { 'jollibee-sariaya': '/a.png', 'wings-dims-sariaya': '/w.jpg' },
   items: { 'chickenjoy-rice': '/c.jpg', yumburger: '/y.jpg' },
 };
 
@@ -20,7 +20,7 @@ describe('visibleManifest', () => {
 
   it('lists the protected brand assets explicitly', () => {
     expect([...BRAND_PROTECTED].sort()).toEqual(
-      ['chickenjoy-rice', 'coke-float', 'dunkin-sariaya', 'jollibee-sariaya', 'jolly-spaghetti', 'mcdonalds-sariaya', 'yumburger'],
+      ['chickenjoy-rice', 'coke-float', 'jollibee-sariaya', 'jolly-spaghetti', 'yumburger'],
     );
   });
 });

@@ -1,10 +1,11 @@
 {
   "stores": {
     "jollibee-sariaya": "/assets/stores/jollibee-sariaya/logo.png",
-    "mcdonalds-sariaya": "/assets/stores/mcdonalds-sariaya/logo.png",
-    "dunkin-sariaya": "/assets/stores/dunkin-sariaya/logo.png",
-    "wings-dims-sariaya": "/assets/stores/wings-dims-sariaya/logo.jpg",
-    "dash-espresso-sariaya": "/assets/stores/dash-espresso-sariaya/logo.jpg"
+    "labarrida-sariaya": "/assets/stores/labarrida-sariaya/logo.png",
+    "bukid-amyr": "/assets/stores/bukid-amyr/logo.png",
+    "kope-right": "/assets/stores/kope-right/logo.png",
+    "wings-dims-sariaya": "/assets/stores/wings-dims-sariaya/logo.png",
+    "dash-espresso-sariaya": "/assets/stores/dash-espresso-sariaya/logo.png"
   },
   "items": {
     "chickenjoy-rice": "/assets/stores/jollibee-sariaya/items/chickenjoy-rice.jpg",

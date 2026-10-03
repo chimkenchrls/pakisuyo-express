@@ -15,57 +15,42 @@ export const CATEGORIES = [
   ...DIRECTORY_CATEGORIES.map(({ id, label }) => ({ id, label })),
 ];
 
-// The 5 featured stores, in display order. Jollibee's demo menu uses its official names and prices
-// (jollibee.com.ph, checked 3 October 2026); the Sariaya branch may charge differently.
+// The 5 featured stores, in display order (stores that agreed to be featured, with their own logos).
 export const STORES = [
   {
-    id: "jollibee-sariaya",
-    name: "Jollibee Sariaya",
+    id: "labarrida-sariaya",
+    name: "La Barrida Sariaya",
+    aliases: ["La Barrida Pizza Haus"], // its name on OpenStreetMap, so it isn't listed twice
     category: "fast-food",
-    categoryLabel: "Fast food",
+    categoryLabel: "Pizza",
     town: "Sariaya",
-    eta: "20–30 min",
-    initials: "JB",
-    color: "#E4002B",
+    eta: "25–35 min",
+    initials: "LB",
+    color: "#D7262E",
     textColor: "#FFFFFF",
-    menu: [
-      {
-        id: "chickenjoy-rice",
-        name: "1-pc Chickenjoy Solo",
-        price: 98,
-        icon: "bowl-food",
-      },
-      {
-        id: "jolly-spaghetti",
-        name: "Jolly Spaghetti Solo",
-        price: 76,
-        icon: "bowl-steam",
-      },
-      { id: "yumburger", name: "Yumburger Solo", price: 51, icon: "hamburger" },
-      { id: "coke-float", name: "Coke Float", price: 80, icon: "pint-glass" },
-    ],
-  },
-  {
-    id: "mcdonalds-sariaya",
-    name: "McDonald's Sariaya",
-    category: "fast-food",
-    categoryLabel: "Fast food",
-    town: "Sariaya",
-    eta: "20–30 min",
-    initials: "MC",
-    color: "#DA291C",
-    textColor: "#FFC72C",
     menu: [],
   },
   {
-    id: "dunkin-sariaya",
-    name: "Dunkin' Sariaya",
+    id: "bukid-amyr",
+    name: "Bukid Amyr Restaurant",
+    category: "restaurant",
+    categoryLabel: "Filipino",
+    town: "Sariaya",
+    eta: "25–35 min",
+    initials: "BA",
+    color: "#3E7B27",
+    textColor: "#FFFFFF",
+    menu: [],
+  },
+  {
+    id: "kope-right",
+    name: "KOPE-RIGHT",
     category: "cafe",
-    categoryLabel: "Donuts & coffee",
+    categoryLabel: "Coffee",
     town: "Sariaya",
     eta: "15–25 min",
-    initials: "DD",
-    color: "#FF671F",
+    initials: "KR",
+    color: "#141414",
     textColor: "#FFFFFF",
     menu: [],
   },
@@ -95,4 +80,39 @@ export const STORES = [
   },
 ];
 
-export const getStore = (id) => STORES.find((s) => s.id === id) ?? null;
+
+// The app demo also shows Jollibee with its real menu (pitch preview of the future app; not featured).
+// Jollibee's names and prices are from jollibee.com.ph, checked 3 October 2026; the Sariaya branch may differ.
+export const DEMO_ONLY_STORES = [
+  {
+    id: "jollibee-sariaya",
+    name: "Jollibee Sariaya",
+    category: "fast-food",
+    categoryLabel: "Fast food",
+    town: "Sariaya",
+    eta: "20–30 min",
+    initials: "JB",
+    color: "#E4002B",
+    textColor: "#FFFFFF",
+    menu: [
+      {
+        id: "chickenjoy-rice",
+        name: "1-pc Chickenjoy Solo",
+        price: 98,
+        icon: "bowl-food",
+      },
+      {
+        id: "jolly-spaghetti",
+        name: "Jolly Spaghetti Solo",
+        price: 76,
+        icon: "bowl-steam",
+      },
+      { id: "yumburger", name: "Yumburger Solo", price: 51, icon: "hamburger" },
+      { id: "coke-float", name: "Coke Float", price: 80, icon: "pint-glass" },
+    ],
+  },
+];
+
+export const DEMO_STORES = [...DEMO_ONLY_STORES, ...STORES];
+
+export const getStore = (id) => DEMO_STORES.find((s) => s.id === id) ?? null;

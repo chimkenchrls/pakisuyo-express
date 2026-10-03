@@ -36,7 +36,8 @@ test('public build has no third-party brand logos and can be indexed', async ({ 
   await page.goto('/');
   await expect(page.locator('#restaurants .store-card')).toHaveCount(5);
   await expect(page.locator('img[src*="jollibee-sariaya"], img[src*="mcdonalds-sariaya"], img[src*="dunkin-sariaya"]')).toHaveCount(0);
-  await expect(page.locator('img[src*="wings-dims-sariaya"]')).toHaveCount(1); // owner-supplied logo stays
+  await expect(page.locator('img[src*="wings-dims-sariaya"]')).toHaveCount(1); // owner-supplied logos stay
+  await expect(page.locator('img[src*="labarrida-sariaya"], img[src*="bukid-amyr"], img[src*="kope-right"]')).toHaveCount(3);
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
   const res = await page.request.get('/assets/stores/jollibee-sariaya/logo.png');
   expect(res.headers()['content-type'] ?? '').not.toContain('image/png'); // file not shipped
