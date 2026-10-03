@@ -1,12 +1,6 @@
-import { getStore } from '../data/stores.js';
 import { paymentLabel } from '../data/payments.js';
 import { normalisePhone } from './validate.js';
 import { mapsLink } from './geo.js';
-
-export function storeDisplayName(data) {
-  if (data.storeId === 'other') return data.storeOther.trim();
-  return getStore(data.storeId)?.name ?? '';
-}
 
 export function buildOrderMessage(data) {
   const lines = [
@@ -18,7 +12,7 @@ export function buildOrderMessage(data) {
   if (data.pin) lines.push(`📍 Pin: ${mapsLink(data.pin.lat, data.pin.lng)}`);
   lines.push(
     `Contact Number: ${normalisePhone(data.phone)}`,
-    `Store/s: ${storeDisplayName(data)}`,
+    `Store/s: ${data.store.trim()}`,
     `Order List: ${data.orderList.trim()}`,
     `Payment: ${paymentLabel(data.payment)}`,
   );

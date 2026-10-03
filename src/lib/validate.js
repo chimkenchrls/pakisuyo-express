@@ -1,11 +1,12 @@
 import { PAYMENT_METHODS } from '../data/payments.js';
 
-export const FIELD_ORDER = ['name', 'phone', 'address', 'landmark', 'storeId', 'storeOther', 'orderList', 'payment'];
+export const FIELD_ORDER = ['name', 'phone', 'address', 'landmark', 'store', 'orderList', 'payment'];
 
 const REQUIRED_TEXT = {
   name: 'Please enter your name.',
   address: 'Please enter your exact address.',
   landmark: 'Please add a landmark so our rider can find you.',
+  store: 'Please choose or type a store.',
   orderList: 'Please list what you want to order.',
 };
 
@@ -25,8 +26,6 @@ export function validateOrder(data) {
     if (!text(field)) errors[field] = message;
   }
   if (!normalisePhone(data.phone)) errors.phone = 'Enter a PH mobile number, e.g. 0917 123 4567.';
-  if (!text('storeId')) errors.storeId = 'Please choose a store.';
-  else if (data.storeId === 'other' && !text('storeOther')) errors.storeOther = 'Please type the store name.';
   if (!PAYMENT_METHODS.some((m) => m.id === data.payment)) errors.payment = 'Please choose how you will pay.';
 
   return { valid: Object.keys(errors).length === 0, errors };

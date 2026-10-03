@@ -6,8 +6,7 @@ const BASE = {
   phone: '+63 917-123-4567',
   address: '123 Rizal St, Poblacion',
   landmark: 'Blue gate beside the chapel',
-  storeId: 'jollibee-sariaya',
-  storeOther: '',
+  store: ' Jollibee Sariaya ',
   orderList: '1 Chickenjoy bucket\n2 Coke Float',
   payment: 'gcash',
   notes: '',
@@ -38,8 +37,8 @@ describe('buildOrderMessage', () => {
     expect(buildOrderMessage({ ...BASE, notes: '   ' })).not.toContain('Notes:');
   });
 
-  it('uses the typed store name for "other" and long payment labels', () => {
-    const msg = buildOrderMessage({ ...BASE, storeId: 'other', storeOther: ' Aling Nena Bakery ', payment: 'card' });
+  it('uses the store exactly as picked or typed (trimmed) and long payment labels', () => {
+    const msg = buildOrderMessage({ ...BASE, store: '  Aling Nena Bakery ', payment: 'card' });
     expect(msg).toContain('Store/s: Aling Nena Bakery');
     expect(msg).toContain('Payment: Credit/Debit Card');
   });

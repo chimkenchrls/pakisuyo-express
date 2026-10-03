@@ -6,8 +6,7 @@ const VALID = {
   phone: '0917 123 4567',
   address: '123 Rizal St, Poblacion',
   landmark: 'Blue gate beside the chapel',
-  storeId: 'jollibee-sariaya',
-  storeOther: '',
+  store: 'Jollibee Sariaya',
   orderList: '1 Chickenjoy bucket',
   payment: 'gcash',
   notes: '',
@@ -49,7 +48,7 @@ describe('validateOrder', () => {
     expect(validateOrder(VALID)).toEqual({ valid: true, errors: {} });
   });
 
-  it.each(['name', 'address', 'landmark', 'orderList'])('requires %s (whitespace counts as empty)', (field) => {
+  it.each(['name', 'address', 'landmark', 'store', 'orderList'])('requires %s (whitespace counts as empty)', (field) => {
     const result = validateOrder({ ...VALID, [field]: '   ' });
     expect(result.valid).toBe(false);
     expect(Object.keys(result.errors)).toEqual([field]);
@@ -60,13 +59,8 @@ describe('validateOrder', () => {
     expect(errors.phone).toMatch(/0917 123 4567/);
   });
 
-  it('requires a store', () => {
-    expect(validateOrder({ ...VALID, storeId: '' }).errors).toHaveProperty('storeId');
-  });
-
-  it('requires a typed store name when "other" is chosen', () => {
-    expect(validateOrder({ ...VALID, storeId: 'other', storeOther: ' ' }).errors).toHaveProperty('storeOther');
-    expect(validateOrder({ ...VALID, storeId: 'other', storeOther: 'Aling Nena Bakery' }).valid).toBe(true);
+  it('asks the customer to choose or type a store', () => {
+    expect(validateOrder({ ...VALID, store: '' }).errors.store).toBe('Please choose or type a store.');
   });
 
   it('requires a known payment method', () => {
