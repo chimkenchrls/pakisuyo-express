@@ -126,8 +126,8 @@ test('the delivery fee line follows the chosen store', async ({ page }) => {
 test('privacy is explained next to the order button and in the footer', async ({ page }) => {
   await page.goto('/#order');
   await expect(page.getByText("Your details are only used for this delivery.")).toBeVisible();
-  await page.getByText('Privacy', { exact: true }).click();
-  await expect(page.locator('.privacy')).toContainText('OpenStreetMap');
+  await page.locator('#site-footer').getByRole('link', { name: 'Privacy', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Privacy' })).toContainText('OpenStreetMap');
 });
 
 test.describe('contact number', () => {

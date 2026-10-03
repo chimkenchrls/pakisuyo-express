@@ -41,3 +41,9 @@
 .toast__check path { stroke-dasharray: 24; stroke-dashoffset: 0; }
 .motion .toast:not([hidden]) { animation: toast-in .25s ease-out; }
 .motion .toast__check path { animation: draw .45s .15s ease-out both; }
+
+/* About / Privacy / Terms modal */
+@keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+.motion .info-modal[open] { animation: modal-in .22s ease-out; }
+@keyframes fade-in { from { opacity: 0; } }
+.motion .info-modal[open]::backdrop { animation: fade-in .22s ease-out; } /* fade only: a sliding backdrop leaves a gap at the top */

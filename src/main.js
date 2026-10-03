@@ -12,6 +12,7 @@ import { renderCoverage } from './sections/coverage.js';
 import { renderAppPromo } from './sections/app-promo.js';
 import { renderFooter } from './sections/footer.js';
 import { mountStoreSheet } from './sections/store-sheet.js';
+import { mountInfoModals } from './sections/info-modals.js';
 import { installImageFallback } from './lib/images.js';
 import { setupReveal } from './lib/reveal.js';
 
@@ -31,4 +32,5 @@ renderOrderForm($('order'), { onBrowse: (trigger) => storeSheet.openFromPage(tri
 renderCoverage($('coverage'));
 renderAppPromo($('app'));
 renderFooter($('site-footer'));
+mountInfoModals();
 setupReveal();

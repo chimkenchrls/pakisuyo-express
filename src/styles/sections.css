@@ -156,9 +156,6 @@ html.is-locked { overflow: hidden; }
 .remember__label input { width: 20px; height: 20px; accent-color: var(--brand-red); }
 .remember__clear { border: 0; background: none; padding: 8px 0; color: var(--brand-red); font-weight: 700; text-decoration: underline; cursor: pointer; }
 .remember__clear[hidden] { display: none; }
-.privacy { grid-column: 1 / -1; color: #CFCFCF; font-size: .85rem; }
-.privacy summary { cursor: pointer; color: var(--brand-yellow); font-weight: 700; min-height: 44px; display: flex; align-items: center; }
-.privacy p { margin: 0 0 8px; max-width: 70ch; }
 
 /* Payment badges: real GCash wordmark, drawn cash icon */
 .pay-badge { display: inline-flex; align-items: center; gap: 8px; }
@@ -193,3 +190,25 @@ html.is-locked { overflow: hidden; }
 .site-header { transition: background-color .25s ease, box-shadow .25s ease; }
 .site-header:not(.is-over-hero) { box-shadow: 0 2px 12px rgba(0, 0, 0, .08); }
 .site-header.is-over-hero, .site-header.is-over-hero .site-nav.is-open { background: var(--surface); }
+
+/* Footer legal links */
+.site-footer__legal { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; color: #CFCFCF; font-size: .9rem; }
+.site-footer__legal a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.site-footer__credit { flex-basis: 100%; font-size: .8rem; color: #9A9A9A; }
+
+/* About / Privacy / Terms modal */
+.info-modal { border: 0; padding: 0; width: min(640px, calc(100% - 24px)); max-height: min(86vh, 900px); border-radius: 20px; box-shadow: 0 24px 60px rgba(0, 0, 0, .3); color: var(--ink); }
+.info-modal::backdrop { background: rgba(20, 20, 20, .55); }
+.info-modal__card { display: flex; flex-direction: column; max-height: inherit; }
+.info-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.info-modal__title { margin: 0; font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; }
+.info-modal__close { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--surface-muted); font-size: 1.1rem; cursor: pointer; }
+.info-modal__body:focus { outline: none; }
+.info-modal__body { overflow-y: auto; overscroll-behavior: contain; padding: 4px 20px 24px; line-height: 1.6; }
+.info-modal__body h3 { margin: 20px 0 4px; font-size: 1rem; font-weight: 800; }
+.info-modal__body p { margin: 8px 0; }
+.info-modal__body a { color: var(--brand-red); font-weight: 700; }
+.info-lead { font-size: 1.05rem; }
+.info-meta { color: var(--ink-muted); font-size: .85rem; }
+.info-draft { display: inline-block; margin-top: 14px !important; background: var(--yellow-soft); color: var(--ink); border-radius: 8px; padding: 4px 10px; font-size: .8rem; font-weight: 800; }
+.info-links { margin-top: 18px !important; }
