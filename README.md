@@ -16,7 +16,8 @@ npm run build        # production build in dist/
 
 ## Editing content
 
-- **Stores, sample menus, fees, promo, coverage towns:** `src/data/stores.js`
+- **Featured stores (exactly 5), sample menus, fees, promo, coverage towns:** `src/data/stores.js`
+- **Stores missing from OpenStreetMap:** add them to `src/data/extra-stores.js` (no re-fetch needed)
 - **Payment methods:** `src/data/payments.js`
 - **Messenger / Facebook links:** `src/data/contact.js`
 
@@ -26,13 +27,15 @@ npm run build        # production build in dist/
 - To use your own photo, save it as `public/assets/stores/jollibee-sariaya/items/<item-id>.png` and run `npm run fetch:images` (your files always win).
 - Anything missing falls back to an initials or emoji tile automatically.
 - Credits: `public/assets/CREDITS.md`.
+- Directory stores without a logo show a category icon. All store pictures go through `storeImageHtml()` in `src/lib/images.js` — the one place to add Google Places photos later.
 
 > **Brand logos and brand food photos are for the private pitch only.** Swap them for owner-owned or stock images before any public launch. Only files change, no code.
 
 ## Regenerating data
 
 ```bash
-npm run fetch:boundary   # Sariaya polygon from OpenStreetMap
+npm run fetch:boundary -- Lucena   # a town's boundary (default Sariaya)
+npm run fetch:stores               # all food & drink places in Sariaya + Lucena → public/data/directory.json
 npm run fetch:images     # logos/photos from Wikimedia Commons
 npm run export:logos     # logo PNGs incl. 1080×1080 Facebook profile picture
 ```
