@@ -1,0 +1,70 @@
+.demo { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.phone { width: min(320px, 100%); aspect-ratio: 9 / 18.5; border: 10px solid var(--ink); border-radius: 40px; background: var(--surface); overflow: hidden; box-shadow: 0 24px 48px rgba(0, 0, 0, .2); position: relative; }
+.phone__screen { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; font-size: 14px; outline: none; }
+.demo__caption { margin: 0; max-width: 34ch; text-align: center; font-weight: 600; min-height: 3em; }
+
+.ds { min-height: 100%; position: relative; background: var(--surface); padding-bottom: 72px; }
+.ds button { font: inherit; cursor: pointer; color: inherit; }
+.ds--splash { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border: 0; background: var(--brand-red); padding: 0; }
+.ds-top { background: var(--brand-yellow); padding: 14px; }
+.ds-deliver { margin: 0; font-size: .8rem; }
+.ds-greet { margin: 6px 0 10px; font-weight: 800; font-size: 1.15rem; letter-spacing: -.01em; }
+.ds-search { width: 100%; border: 0; border-radius: var(--radius-pill); padding: 10px 14px; min-height: 40px; }
+.ds-chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; padding-bottom: 2px; }
+.ds-chip { border: 0; border-radius: var(--radius-pill); padding: 6px 12px; background: var(--surface); font-weight: 600; white-space: nowrap; }
+.ds-chip.is-on { background: var(--brand-red); color: var(--surface) !important; }
+.ds-stores, .ds-menu { list-style: none; margin: 0; padding: 0; }
+.ds-store { display: flex; gap: 10px; align-items: center; width: 100%; padding: 10px 14px; border: 0; border-bottom: 1px solid var(--line); background: var(--surface); text-align: left; }
+.ds-store b { display: block; }
+.ds-row-logo { width: 46px; height: 46px; border-radius: 12px; object-fit: contain; font-size: .9rem; }
+.ds-meta { color: var(--ink-muted); font-size: .8rem; }
+.ds-open { color: var(--success); font-weight: 700; }
+.ds-empty { padding: 24px 14px; color: var(--ink-muted); }
+.ds-back { position: absolute; top: 10px; left: 10px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--surface); box-shadow: var(--shadow-card); z-index: 2; }
+.ds-back--inline { position: static; box-shadow: none; background: transparent; }
+.ds-store-hero { height: 120px; display: flex; align-items: center; justify-content: center; }
+.ds-store-logo { width: 72px; height: 72px; background: var(--surface); border-radius: 18px; padding: 6px; object-fit: contain; font-size: 1.2rem; }
+.ds-pad { padding: 12px 14px; }
+.ds-h { margin: 0; font-size: 1.1rem; font-weight: 800; }
+.ds-muted { margin: 0; color: var(--ink-muted); font-size: .8rem; }
+.ds-item { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.ds-item-img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; font-size: 1.6rem; background: var(--yellow-soft); }
+.ds-item-text { flex: 1; display: grid; }
+.ds-qty { display: flex; align-items: center; gap: 8px; }
+.ds-round { width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--brand-red); color: var(--surface) !important; font-weight: 800; font-size: 1.1rem; }
+.ds-round--ghost { background: var(--surface-muted); color: var(--ink) !important; }
+.ds-soon { padding: 20px 14px; display: grid; gap: 10px; justify-items: start; }
+.ds-soon p { margin: 0; }
+.ds-btn { border: 0; border-radius: var(--radius-pill); padding: 10px 16px; background: var(--brand-red); color: var(--surface) !important; font-weight: 700; }
+.ds-cartbar { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 0; border-radius: var(--radius-pill); padding: 12px 16px; background: var(--brand-red); color: var(--surface) !important; font-weight: 800; z-index: 3; }
+.ds-cartbar--center { justify-content: center; }
+.ds--checkout { background: var(--surface-muted); }
+.ds-bar { display: flex; align-items: center; gap: 6px; background: var(--brand-yellow); padding: 8px 10px; font-size: 1rem; }
+.ds-card { background: var(--surface); margin: 8px; border-radius: 14px; padding: 12px; display: grid; gap: 6px; }
+.ds-card p { margin: 0; }
+.ds-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ds-link { border: 0; background: none; color: var(--brand-red) !important; font-weight: 700; padding: 0; }
+.ds-map { height: 64px; border-radius: 10px; background: repeating-linear-gradient(45deg, #E8F0E3 0 8px, #DFE9D8 8px 16px); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.ds-pm { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px; }
+.ds-promo { border: 0; text-align: left; background: var(--yellow-soft); border-radius: 10px; padding: 8px 10px; font-size: .8rem; }
+.ds-promo.is-applied { background: #E6F4EA; }
+.ds-line { font-size: .85rem; }
+.ds-totals { border-top: 1px dashed #DDD; margin-top: 4px; padding-top: 6px; display: grid; gap: 3px; font-size: .85rem; }
+.ds-discount { color: var(--success); font-weight: 700; }
+.ds-total { font-weight: 800; font-size: 1rem; }
+.ds-sheet-backdrop { position: absolute; inset: 0; width: 100%; background: rgba(0, 0, 0, .4); border: 0; z-index: 4; }
+.ds-sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 18px 18px 0 0; padding: 14px; z-index: 5; display: grid; gap: 8px; animation: sheet-up .2s ease-out; }
+.ds-sheet h4 { margin: 0 0 4px; }
+.ds-sheet-option { display: flex; justify-content: space-between; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); text-align: left; font-weight: 600; }
+.ds-sheet-option.is-on { border-color: var(--brand-red); background: #FFF0F0; }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+.ds-track-map { height: 150px; position: relative; background: repeating-linear-gradient(45deg, #E8F0E3 0 10px, #DFE9D8 10px 20px); }
+.ds-rider { position: absolute; top: 50%; left: calc(8% + var(--progress) * 70%); transform: translateY(-50%); font-size: 1.8rem; transition: left .6s ease; }
+.ds-dest { position: absolute; top: 50%; right: 8%; transform: translateY(-50%); font-size: 1.6rem; }
+.ds-timeline { list-style: none; margin: 0; padding: 4px 14px 0; display: grid; gap: 10px; }
+.ds-step { display: flex; gap: 10px; align-items: center; font-size: .9rem; color: var(--ink-muted); }
+.ds-dot { width: 14px; height: 14px; border-radius: 50%; background: #DDD; flex: none; }
+.ds-step.is-done { color: var(--ink); }
+.ds-step.is-done .ds-dot { background: var(--success); }
+.ds-step.is-now { color: var(--ink); font-weight: 800; }
+.ds-step.is-now .ds-dot { background: var(--brand-red); box-shadow: 0 0 0 5px #FFD5D6; }
