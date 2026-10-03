@@ -39,7 +39,7 @@ export const INFO_PAGES = {
       <h3>Map and location</h3>
       <p>"Use my current location" only works after your browser asks for your permission. When you drop a pin, its location is sent to OpenStreetMap to look up the street address, and the map images come from OpenStreetMap too. See the <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">OpenStreetMap privacy policy</a>.</p>
       <h3>Other services</h3>
-      <p>The website's font is loaded from Google Fonts, so Google receives your IP address and browser details when the page opens. The store list comes from our own website.</p>
+      <p>Apart from OpenStreetMap, this website loads everything, including its fonts and the store list, from its own server.</p>
       <h3>No tracking</h3>
       <p>No analytics, ads or tracking cookies.</p>
       <h3>Your rights</h3>

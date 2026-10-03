@@ -1,3 +1,8 @@
+// Plus Jakarta Sans (SIL OFL), served from this site: no Google Fonts request, faster first paint.
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+import '@fontsource/plus-jakarta-sans/800.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/sections.css';

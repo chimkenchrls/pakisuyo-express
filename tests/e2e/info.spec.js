@@ -46,7 +46,8 @@ test('a shared link opens the right page directly', async ({ page }) => {
 test('privacy and terms describe what the site really does, without em-dashes or emoji', async ({ page }) => {
   await page.goto('/#privacy');
   const privacy = page.getByRole('dialog', { name: 'Privacy' });
-  for (const phrase of ['Remember my details', 'OpenStreetMap', 'Google Fonts', 'Messenger', 'No analytics']) {
+  await expect(privacy).not.toContainText('Google');
+  for (const phrase of ['Remember my details', 'OpenStreetMap', 'Messenger', 'No analytics']) {
     await expect(privacy).toContainText(phrase);
   }
   for (const id of ['privacy', 'terms', 'about']) {

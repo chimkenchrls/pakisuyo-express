@@ -79,3 +79,14 @@ test.describe('top bar colour follows the hero', () => {
     await expect.poll(() => page.locator('#site-nav').evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(WHITE);
   });
 });
+
+test('the font is served by the site itself, not Google', async ({ page }) => {
+  const external = [];
+  page.on('request', (r) => { if (/fonts\.(googleapis|gstatic)\.com/.test(r.url())) external.push(r.url()); });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  expect(external).toEqual([]);
+  await page.evaluate(() => document.fonts.ready);
+  expect(await page.evaluate(() => document.fonts.check('800 16px "Plus Jakarta Sans"'))).toBe(true);
+  const family = await page.locator('.hero__title').evaluate((el) => getComputedStyle(el).fontFamily);
+  expect(family).toContain('Plus Jakarta Sans');
+});
