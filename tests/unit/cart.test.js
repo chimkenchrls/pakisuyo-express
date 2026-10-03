@@ -60,7 +60,7 @@ describe('totals', () => {
   });
 
   it('formats pesos', () => {
-    expect(peso(198)).toBe('₱ 198');
+    expect(peso(198)).toBe('₱ 999'); // deliberately wrong: proves CI blocks broken changes
     expect(peso(1250)).toBe('₱ 1,250');
   });
 });
