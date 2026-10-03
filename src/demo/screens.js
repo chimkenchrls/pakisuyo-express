@@ -4,6 +4,7 @@ import { itemCount, totals, peso } from '../lib/cart.js';
 import { storeImageHtml, itemImageHtml } from '../lib/images.js';
 import { logoStacked } from '../brand/logo.js';
 import { escapeHtml } from '../lib/html.js';
+import { icon } from '../lib/icons.js';
 import { visibleStores, isTrackingDone, TRACKING_STEPS, DEMO_STORE_ID } from './state.js';
 
 export const CAPTIONS = {
@@ -33,10 +34,10 @@ function home(state) {
   return `
     <div class="ds ds--home">
       <div class="ds-top">
-        <p class="ds-deliver">📍 Deliver to <b>Poblacion, Sariaya</b></p>
+        <p class="ds-deliver">${icon('map-pin', 'icon--brand')} Deliver to <b>Poblacion, Sariaya</b></p>
         <p class="ds-greet">Hungry? We got you.</p>
         <label class="sr-only" for="demo-search">Search stores or food</label>
-        <input id="demo-search" class="ds-search" type="search" placeholder="🔍 Search stores or food"
+        <input id="demo-search" class="ds-search" type="search" placeholder="Search stores or food"
           value="${escapeHtml(state.query)}" data-focus-key="search" autocomplete="off">
         <div class="ds-chips" role="group" aria-label="Categories">
           ${CATEGORIES.map((c) => `
@@ -70,14 +71,14 @@ function storeScreen(state) {
 
   return `
     <div class="ds ds--store">
-      <button type="button" class="ds-back" data-action="BACK" aria-label="Back">←</button>
+      <button type="button" class="ds-back" data-action="BACK" aria-label="Back">${icon('arrow-left')}</button>
       <div class="ds-store-hero" style="background:${store.color}">${storeImageHtml(store, 'ds-store-logo')}</div>
       <div class="ds-pad">
         <h3 class="ds-h">${escapeHtml(store.name)}</h3>
         <p class="ds-muted">${store.menu.length ? 'Sample menu · prices for demo only' : `${escapeHtml(store.categoryLabel)} · ${store.eta}`}</p>
       </div>
       ${menu}
-      ${count ? `<button type="button" class="ds-cartbar" data-action="GO_CHECKOUT"><span>🛒 ${count} item${count > 1 ? 's' : ''}</span><span>View cart · ${peso(subtotal)}</span></button>` : ''}
+      ${count ? `<button type="button" class="ds-cartbar" data-action="GO_CHECKOUT"><span>${icon('shopping-bag')} ${count} item${count > 1 ? 's' : ''}</span><span>View cart · ${peso(subtotal)}</span></button>` : ''}
     </div>`;
 }
 
@@ -88,7 +89,7 @@ function sheet(state) {
       <h4>Payment method</h4>
       ${PAYMENT_METHODS.map((m) => `
         <button type="button" class="ds-sheet-option${m.id === state.payment ? ' is-on' : ''}" data-action="SET_PAYMENT"
-          data-payment="${m.id}" aria-pressed="${m.id === state.payment}"><span class="pay-badge">${paymentBadgeHtml(m)}</span>${m.id === state.payment ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}
+          data-payment="${m.id}" aria-pressed="${m.id === state.payment}"><span class="pay-badge">${paymentBadgeHtml(m)}</span>${m.id === state.payment ? `<span class="ds-check">${icon('check')}</span>` : ''}</button>`).join('')}
     </div>`;
 }
 
@@ -97,15 +98,15 @@ function checkout(state) {
   const t = totals(state.cart, store, { promoApplied: state.promoApplied });
   const method = PAYMENT_METHODS.find((m) => m.id === state.payment);
   const promo = !t.feeKnown ? '' : state.promoApplied
-    ? `<p class="ds-promo is-applied">✅ ${PROMO.code} applied: ₱${PROMO.discount} off delivery</p>`
-    : `<button type="button" class="ds-promo" data-action="APPLY_PROMO">🎉 First order? Use code <b>${PROMO.code}</b> for ₱${PROMO.discount} off delivery. <u>Apply</u></button>`;
+    ? `<p class="ds-promo is-applied">${icon('check-circle')} ${PROMO.code} applied: ₱${PROMO.discount} off delivery</p>`
+    : `<button type="button" class="ds-promo" data-action="APPLY_PROMO">${icon('confetti')} First order? Use code <b>${PROMO.code}</b> for ₱${PROMO.discount} off delivery. <u>Apply</u></button>`;
 
   return `
     <div class="ds ds--checkout">
-      <div class="ds-bar"><button type="button" class="ds-back ds-back--inline" data-action="BACK" aria-label="Back">←</button><b>Checkout</b></div>
+      <div class="ds-bar"><button type="button" class="ds-back ds-back--inline" data-action="BACK" aria-label="Back">${icon('arrow-left')}</button><b>Checkout</b></div>
       <section class="ds-card">
         <div class="ds-row"><b>Delivery address</b><span class="ds-link">Change</span></div>
-        <div class="ds-map" aria-hidden="true">📍</div>
+        <div class="ds-map" aria-hidden="true">${icon('map-pin', 'icon--brand')}</div>
         <p><b>Purok 3, Brgy. Sampaloc, Sariaya</b></p>
         <p class="ds-muted">Landmark: Blue gate beside the chapel</p>
       </section>
@@ -140,9 +141,9 @@ function tracking(state) {
   const progress = state.trackingStep / (TRACKING_STEPS.length - 1);
   return `
     <div class="ds ds--tracking">
-      <div class="ds-track-map" aria-hidden="true"><span class="ds-rider" style="--progress:${progress}">🛵</span><span class="ds-dest">📍</span></div>
+      <div class="ds-track-map" aria-hidden="true"><span class="ds-rider" style="--progress:${progress}">${icon('moped')}</span><span class="ds-dest">${icon('map-pin', 'icon--brand')}</span></div>
       <div class="ds-pad">
-        <h3 class="ds-h">${done ? 'Delivered! Enjoy your meal 🎉' : `Arriving in ~${12 - state.trackingStep * 3} min`}</h3>
+        <h3 class="ds-h">${done ? 'Delivered! Enjoy your meal.' : `Arriving in ~${12 - state.trackingStep * 3} min`}</h3>
         <p class="ds-muted">Order #${state.orderNo} · ${escapeHtml(getStore(state.storeId).name)}</p>
       </div>
       <ol class="ds-timeline">

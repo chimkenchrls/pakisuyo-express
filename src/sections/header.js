@@ -1,4 +1,5 @@
 import { logoHorizontal } from '../brand/logo.js';
+import { icon } from '../lib/icons.js';
 
 const LINKS = [
   ['#restaurants', 'Restaurants'],
@@ -16,7 +17,7 @@ export function renderHeader(el) {
         ${LINKS.map(([href, label]) => `<a href="${href}">${label}</a>`).join('')}
       </nav>
       <a class="btn btn--primary site-header__cta" href="#order">Order Now</a>
-      <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">☰</button>
+      <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${icon('list')}</button>
     </div>`;
 
   const toggle = el.querySelector('.site-header__toggle');

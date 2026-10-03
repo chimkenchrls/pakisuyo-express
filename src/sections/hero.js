@@ -1,14 +1,15 @@
-import { logoStacked } from '../brand/logo.js';
-import { getHoursStatus } from '../lib/hours.js';
-import { MESSENGER_URL } from '../data/contact.js';
+import { logoStacked } from "../brand/logo.js";
+import { getHoursStatus } from "../lib/hours.js";
+import { MESSENGER_URL } from "../data/contact.js";
+import { icon } from "../lib/icons.js";
 
 export function renderHero(el, { now = new Date() } = {}) {
   const hours = getHoursStatus(now);
-  el.className = 'hero';
+  el.className = "hero";
   el.innerHTML = `
     <div class="container hero__inner">
       <div class="hero__copy">
-        <span class="pill ${hours.isOpen ? 'pill--open' : 'pill--closed'}" data-testid="hours-badge">● ${hours.label}</span>
+        <span class="pill ${hours.isOpen ? "pill--open" : "pill--closed"}" data-testid="hours-badge"><span class="pill__dot" aria-hidden="true"></span>${hours.label}</span>
         <h1 class="hero__title">Always ready for your <span class="hero__accent">Pakisuyo!</span></h1>
         <p class="hero__sub">Food and drinks from your favourite spots, delivered anywhere in Sariaya.</p>
         <div class="hero__ctas">
@@ -18,9 +19,9 @@ export function renderHero(el, { now = new Date() } = {}) {
       </div>
       <div class="hero__visual" aria-hidden="true">
         <div class="hero__card">${logoStacked({ size: 96 })}</div>
-        <span class="bubble bubble--1">🍗 Chickenjoy</span>
-        <span class="bubble bubble--2">🧋 Milk tea</span>
-        <span class="bubble bubble--3">🍰 Ube cake</span>
+        <span class="bubble bubble--1">${icon("bowl-food")}Chickenjoy</span>
+        <span class="bubble bubble--2">${icon("pint-glass")}Milk tea</span>
+        <span class="bubble bubble--3">${icon("coffee")}Coffee</span>
       </div>
     </div>`;
 }

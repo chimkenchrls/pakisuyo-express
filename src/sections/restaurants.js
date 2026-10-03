@@ -3,6 +3,7 @@ import { SELECT_STORE_EVENT } from '../data/contact.js';
 import meta from '../data/directory-meta.json';
 import { storeImageHtml } from '../lib/images.js';
 import { escapeHtml } from '../lib/html.js';
+import { icon } from '../lib/icons.js';
 
 export function renderRestaurants(el, { onBrowse }) {
   el.className = 'section restaurants';
@@ -21,7 +22,7 @@ export function renderRestaurants(el, { onBrowse }) {
           </li>`).join('')}
       </ul>
       <div class="restaurants__browse">
-        <button type="button" class="btn browse-btn" data-action="browse-stores">Browse all ${meta.count} stores →</button>
+        <button type="button" class="btn browse-btn" data-action="browse-stores">Browse all ${meta.count} stores${icon('arrow-right')}</button>
         <p class="restaurants__note">Sariaya &amp; Lucena · store list from OpenStreetMap</p>
       </div>
     </div>`;

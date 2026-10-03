@@ -29,15 +29,17 @@ describe('images', () => {
 
   it('gives directory stores a category icon tile', () => {
     const html = storeImageHtml({ id: 'osm-n1', name: 'Libra Bakery', category: 'bakery', town: 'Lucena' }, 'row');
-    expect(html).toContain('🥖');
+    expect(html).toContain('<svg');
     expect(html).toContain('background:#F3EBDD');
-    expect(categoryTile('unknown', 'x')).toContain('🍴');
+    expect(html).not.toMatch(/\p{Extended_Pictographic}/u);
+    expect(categoryTile('unknown', 'x')).toContain('<svg');
   });
 
   it('menu items use the manifest photo or an emoji tile', () => {
     const [chickenjoy, , yumburger] = getStore('jollibee-sariaya').menu;
     expect(itemImageHtml(yumburger, 'i')).toContain('src="/assets/y.png"');
-    expect(itemImageHtml(chickenjoy, 'i')).toContain('🍗');
+    expect(itemImageHtml(chickenjoy, 'i')).toContain('<svg');
+    expect(itemImageHtml(chickenjoy, 'i')).not.toMatch(/\p{Extended_Pictographic}/u);
   });
 });
 

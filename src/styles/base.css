@@ -38,3 +38,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .logo--stacked .logo__sub { font-size: calc(var(--mark) * .16); padding-left: .5em; }
 .logo--dark .logo__name, .logo--red .logo__name { color: var(--surface); }
 .logo--dark .logo__sub, .logo--red .logo__sub { color: var(--brand-yellow); }
+
+/* Icons (Phosphor duotone): sized by font-size, coloured by currentColor */
+.icon { width: 1.2em; height: 1.2em; flex: none; vertical-align: -0.22em; }
+.icon--sm { width: 1em; height: 1em; }
+.icon--brand { color: var(--brand-red); }
+.tile--icon { color: var(--ink); }
+.tile--icon .icon { width: 56%; height: 56%; }

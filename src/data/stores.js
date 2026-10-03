@@ -16,29 +16,29 @@ export const CATEGORIES = [{ id: 'all', label: 'All' }, ...DIRECTORY_CATEGORIES.
 export const STORES = [
   {
     id: 'jollibee-sariaya', name: 'Jollibee Sariaya', category: 'fast-food', categoryLabel: 'Fast food',
-    town: 'Sariaya', eta: '20–30 min', initials: 'JB', color: '#E4002B', textColor: '#FFFFFF', emoji: '🍗',
+    town: 'Sariaya', eta: '20–30 min', initials: 'JB', color: '#E4002B', textColor: '#FFFFFF',
     menu: [
-      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy w/ Rice', price: 99, emoji: '🍗' },
-      { id: 'jolly-spaghetti', name: 'Jolly Spaghetti', price: 70, emoji: '🍝' },
-      { id: 'yumburger', name: 'Yumburger', price: 45, emoji: '🍔' },
-      { id: 'coke-float', name: 'Coke Float', price: 59, emoji: '🥤' },
+      { id: 'chickenjoy-rice', name: '1-pc Chickenjoy w/ Rice', price: 99, icon: 'bowl-food' },
+      { id: 'jolly-spaghetti', name: 'Jolly Spaghetti', price: 70, icon: 'bowl-steam' },
+      { id: 'yumburger', name: 'Yumburger', price: 45, icon: 'hamburger' },
+      { id: 'coke-float', name: 'Coke Float', price: 59, icon: 'pint-glass' },
     ],
   },
   {
     id: 'mcdonalds-sariaya', name: "McDonald's Sariaya", category: 'fast-food', categoryLabel: 'Fast food',
-    town: 'Sariaya', eta: '20–30 min', initials: 'MC', color: '#DA291C', textColor: '#FFC72C', emoji: '🍟', menu: [],
+    town: 'Sariaya', eta: '20–30 min', initials: 'MC', color: '#DA291C', textColor: '#FFC72C', menu: [],
   },
   {
     id: 'dunkin-sariaya', name: "Dunkin' Sariaya", category: 'cafe', categoryLabel: 'Donuts & coffee',
-    town: 'Sariaya', eta: '15–25 min', initials: 'DD', color: '#FF671F', textColor: '#FFFFFF', emoji: '🍩', menu: [],
+    town: 'Sariaya', eta: '15–25 min', initials: 'DD', color: '#FF671F', textColor: '#FFFFFF', menu: [],
   },
   {
     id: 'wings-dims-sariaya', name: 'Wings & Dims Corner', category: 'fast-food', categoryLabel: 'Wings & dimsum',
-    town: 'Sariaya', eta: '20–30 min', initials: 'WD', color: '#E31B23', textColor: '#FFFFFF', emoji: '🍗', menu: [],
+    town: 'Sariaya', eta: '20–30 min', initials: 'WD', color: '#E31B23', textColor: '#FFFFFF', menu: [],
   },
   {
     id: 'dash-espresso-sariaya', name: 'Dash Espresso', category: 'cafe', categoryLabel: 'Coffee',
-    town: 'Sariaya', eta: '15–25 min', initials: 'DE', color: '#141414', textColor: '#FFFFFF', emoji: '☕', menu: [],
+    town: 'Sariaya', eta: '15–25 min', initials: 'DE', color: '#141414', textColor: '#FFFFFF', menu: [],
   },
 ];
 

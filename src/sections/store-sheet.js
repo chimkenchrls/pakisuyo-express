@@ -4,6 +4,7 @@ import { searchStores, storeLabel } from '../lib/directory.js';
 import { loadDirectory } from '../lib/directory-data.js';
 import { storeImageHtml } from '../lib/images.js';
 import { escapeHtml } from '../lib/html.js';
+import { icon } from '../lib/icons.js';
 
 const PAGE = 50;
 const CHIPS = [{ id: 'all', label: 'All' }, ...DIRECTORY_CATEGORIES];
@@ -15,7 +16,7 @@ const rowHtml = (s) => `
       <b class="dir-row__name">${escapeHtml(s.name)}${s.featured ? ' <span class="badge">Featured</span>' : ''}</b>
       <span class="dir-row__meta">${escapeHtml(s.featured ? s.categoryLabel : categoryById(s.category)?.singular ?? '')} · ${escapeHtml(s.town)}</span>
     </div>
-    <button type="button" class="dir-row__order" data-name="${escapeHtml(storeLabel(s))}" aria-label="Order from ${escapeHtml(s.name)}">Order →</button>
+    <button type="button" class="dir-row__order" data-name="${escapeHtml(storeLabel(s))}" aria-label="Order from ${escapeHtml(s.name)}">Order${icon('arrow-right', 'icon--sm')}</button>
   </li>`;
 
 export function mountStoreSheet({ returnFocus }) {
@@ -29,15 +30,16 @@ export function mountStoreSheet({ returnFocus }) {
     <div class="store-sheet__head">
       <div class="store-sheet__title-row">
         <h2 id="store-sheet-title" class="store-sheet__title">All stores</h2>
-        <button type="button" class="store-sheet__close" aria-label="Close">✕</button>
+        <button type="button" class="store-sheet__close" aria-label="Close">${icon('x')}</button>
       </div>
       <div class="store-sheet__search">
         <label class="sr-only" for="store-sheet-q">Search stores</label>
-        <input id="store-sheet-q" type="search" placeholder="🔍 Search stores" autocomplete="off">
+        ${icon('magnifying-glass', 'store-sheet__search-icon')}
+        <input id="store-sheet-q" type="search" placeholder="Search stores" autocomplete="off">
         <label class="sr-only" for="store-sheet-town">Town</label>
-        <select id="store-sheet-town" class="store-sheet__town">
-          <option value="all">📍 All towns</option><option value="Sariaya">📍 Sariaya</option><option value="Lucena">📍 Lucena</option>
-        </select>
+        <span class="store-sheet__town-wrap">${icon('map-pin', 'store-sheet__town-icon')}<select id="store-sheet-town" class="store-sheet__town">
+          <option value="all">All towns</option><option value="Sariaya">Sariaya</option><option value="Lucena">Lucena</option>
+        </select></span>
       </div>
       <div class="store-sheet__chips" role="group" aria-label="Store type">
         ${CHIPS.map((c) => `<button type="button" class="store-sheet__chip" data-category="${c.id}" aria-pressed="${c.id === 'all'}">${c.label}</button>`).join('')}

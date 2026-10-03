@@ -22,7 +22,7 @@ test('owner can tap through a whole order', async ({ page }) => {
   // 99 + 59 + 50 − 10 = 198. A double-tap must place exactly one order.
   await demo.getByRole('button', { name: 'Place Order · ₱ 198' }).dblclick();
   await expect(demo.locator('.ds-step')).toHaveCount(5);
-  await expect(demo.getByText('Delivered! Enjoy your meal 🎉')).toBeVisible({ timeout: 5000 });
+  await expect(demo.getByText('Delivered! Enjoy your meal.')).toBeVisible({ timeout: 5000 });
 
   await demo.getByRole('button', { name: 'Restart demo' }).click();
   await expect(demo.getByRole('button', { name: /Jollibee Sariaya/ })).toBeVisible();

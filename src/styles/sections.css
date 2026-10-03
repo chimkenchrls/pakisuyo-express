@@ -169,3 +169,22 @@ html.is-locked { overflow: hidden; }
 .field__label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
 .field__label-row label { font-weight: 700; }
 .link-btn { border: 0; background: none; padding: 6px 0; min-height: 32px; color: var(--brand-red); font-weight: 700; font-size: .9rem; text-decoration: underline; cursor: pointer; }
+
+/* Icon placements */
+.pill__dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.bubble { display: inline-flex; align-items: center; gap: 6px; }
+.bubble .icon { color: var(--brand-red); }
+.step__icon { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 16px; background: #FFF0F0; color: var(--brand-red); font-size: 1.6rem; }
+.step__icon .icon { width: 1.1em; height: 1.1em; }
+.info-card h3 { display: flex; align-items: center; gap: 8px; }
+.info-card h3 .icon { font-size: 1.35rem; }
+.benefits li { display: flex; align-items: center; gap: 10px; }
+.benefits li .icon { font-size: 1.35rem; }
+.site-header__toggle { display: inline-flex; align-items: center; justify-content: center; }
+.store-sheet__close { display: inline-flex; align-items: center; justify-content: center; }
+.store-sheet__search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); font-size: 1.1rem; pointer-events: none; }
+.store-sheet__search input { padding-left: 42px; }
+.store-sheet__town-wrap { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; }
+.store-sheet__town { position: static; transform: none; padding-left: 30px; }
+.store-sheet__town-icon { position: absolute; left: 10px; color: var(--brand-yellow); font-size: .95rem; pointer-events: none; }
+.dir-row__order { display: inline-flex; align-items: center; gap: 4px; }

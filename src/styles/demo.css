@@ -68,3 +68,15 @@
 .ds-step.is-done .ds-dot { background: var(--success); }
 .ds-step.is-now { color: var(--ink); font-weight: 800; }
 .ds-step.is-now .ds-dot { background: var(--brand-red); box-shadow: 0 0 0 5px #FFD5D6; }
+
+/* Icons in the demo */
+.ds-deliver { display: flex; align-items: center; gap: 4px; }
+.ds-back { display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+.ds-cartbar > span { display: inline-flex; align-items: center; gap: 6px; }
+.ds-promo { display: block; }
+.ds-promo .icon { color: var(--brand-red); margin-right: 4px; }
+.ds-promo.is-applied .icon { color: var(--success); }
+.ds-map { font-size: 1.5rem; }
+.ds-rider { font-size: 2rem; color: var(--ink); }
+.ds-dest { font-size: 1.8rem; }
+.ds-check { color: var(--brand-red); display: inline-flex; }

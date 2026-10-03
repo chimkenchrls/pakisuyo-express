@@ -10,6 +10,7 @@ import { loadDetails, saveDetails, clearDetails } from '../lib/saved-details.js'
 import { deliveryFeeHint } from '../lib/fees.js';
 import { createOrderMap } from './order-map.js';
 import { attachStoreCombobox } from './store-combobox.js';
+import { icon } from '../lib/icons.js';
 
 const field = (name, label, control, { required = true, hidden = false } = {}) => `
   <div class="field${required ? ' field--required' : ''}" id="field-${name}"${hidden ? ' hidden' : ''}>
@@ -41,7 +42,7 @@ function markup() {
         </div>
         <fieldset class="field field--map">
           <legend>Delivery location</legend>
-          <button type="button" class="btn btn--ghost" data-action="locate">📍 Use my current location</button>
+          <button type="button" class="btn btn--ghost" data-action="locate">${icon('map-pin')}Use my current location</button>
           <div class="order-map" id="order-map" aria-label="Map: tap to drop a pin on your location"></div>
           <p class="hint" id="map-status" aria-live="polite">Tap the map to drop a pin. You can drag it to your exact gate.</p>
           <p class="warning" id="area-warning" hidden>Looks like you're outside our delivery area. Message us to check.</p>
