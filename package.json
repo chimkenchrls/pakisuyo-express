@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:pitch": "vite --mode pitch",
     "build": "vite build",
+    "build:pitch": "vite build --mode pitch",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

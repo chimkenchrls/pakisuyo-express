@@ -1,6 +1,6 @@
 import { PAYMENT_METHODS } from '../data/payments.js';
 
-export const FIELD_ORDER = ['name', 'phone', 'address', 'landmark', 'store', 'orderList', 'payment'];
+export const FIELD_ORDER = ['name', 'phone', 'address', 'landmark', 'store', 'orderList', 'payment', 'changeFor'];
 
 const REQUIRED_TEXT = {
   name: 'Please enter your name.',
@@ -18,6 +18,15 @@ export function normalisePhone(raw) {
   return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
 }
 
+// COD "how much will you pay with?": '' → null, "Exact amount" → 'exact', "₱1,000" → 1000, anything else → NaN.
+export function parseChangeFor(raw) {
+  const text = String(raw ?? '').trim();
+  if (!text) return null;
+  if (/^exact/i.test(text)) return 'exact';
+  const digits = text.replace(/[₱,\s]/g, '');
+  return /^[1-9]\d*$/.test(digits) ? Number(digits) : NaN;
+}
+
 export function validateOrder(data) {
   const errors = {};
   const text = (field) => String(data[field] ?? '').trim();
@@ -27,6 +36,9 @@ export function validateOrder(data) {
   }
   if (!normalisePhone(data.phone)) errors.phone = 'Enter a PH mobile number, e.g. 0917 123 4567.';
   if (!PAYMENT_METHODS.some((m) => m.id === data.payment)) errors.payment = 'Please choose how you will pay.';
+  if (data.payment === 'cod' && Number.isNaN(parseChangeFor(data.changeFor))) {
+    errors.changeFor = 'Enter an amount like 500, or choose Exact amount.';
+  }
 
   return { valid: Object.keys(errors).length === 0, errors };
 }

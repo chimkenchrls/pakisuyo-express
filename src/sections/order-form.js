@@ -6,6 +6,8 @@ import { copyText, copyFromTextarea } from '../lib/clipboard.js';
 import { reverseGeocode, addressAfterLookup } from '../lib/geo.js';
 import { latestOnly } from '../lib/async.js';
 import { loadDirectory } from '../lib/directory-data.js';
+import { loadDetails, saveDetails, clearDetails } from '../lib/saved-details.js';
+import { deliveryFeeHint } from '../lib/fees.js';
 import { createOrderMap } from './order-map.js';
 import { attachStoreCombobox } from './store-combobox.js';
 
@@ -45,6 +47,7 @@ function markup() {
             aria-controls="store-listbox" aria-describedby="err-store" autocomplete="off"
             placeholder="Type a store, e.g. Jollibee or Lugaw Queen">
           <ul id="store-listbox" class="combo__list" role="listbox" aria-label="Store suggestions" hidden></ul>
+          <p class="hint" id="store-fee" aria-live="polite"></p>
           <p class="field-error" id="err-store"></p>
         </div>
         ${field('orderList', 'Order List', control('textarea', 'orderList', 'rows="4" placeholder="e.g. 1 Chickenjoy bucket, 2 Coke Float"'))}
@@ -56,9 +59,22 @@ function markup() {
           </div>
           <p class="field-error" id="err-payment"></p>
         </fieldset>
+        <div class="field change" id="field-changeFor" hidden>
+          <label for="f-changeFor">Paying cash? How much will you pay with? (optional)</label>
+          <div class="change__chips">
+            ${['Exact amount', '₱500', '₱1,000'].map((v) => `<button type="button" class="change__chip" data-change="${v}">${v}</button>`).join('')}
+          </div>
+          <input id="f-changeFor" name="changeFor" inputmode="numeric" placeholder="e.g. 1000" aria-describedby="err-changeFor" autocomplete="off">
+          <p class="field-error" id="err-changeFor"></p>
+        </div>
         ${field('notes', 'Notes (optional)', control('textarea', 'notes', 'rows="2" placeholder="e.g. Call when outside"'), { required: false })}
+        <div class="remember">
+          <label class="remember__label"><input type="checkbox" name="remember" checked> Remember my details on this phone</label>
+          <button type="button" class="remember__clear" data-action="clear-saved" hidden>Not you? Clear saved details</button>
+        </div>
         <button type="submit" class="btn btn--primary order-form__submit">Send Order</button>
         <p class="hint">Payment is settled with our team in Messenger. Nothing is charged here.</p>
+        <p class="hint">Your details are only used for this delivery. If you tick “Remember”, they're saved on this phone only — we don't store them anywhere else.</p>
       </form>
     </div>
     <div class="toast" role="status" aria-live="polite" hidden></div>
@@ -85,7 +101,8 @@ export function renderOrderForm(el) {
   const dialog = el.querySelector('dialog');
   const dialogText = dialog.querySelector('textarea');
 
-  let pin = null;
+  const saved = loadDetails();
+  let pin = saved?.pin ?? null;
   let lastAutofilled = null;
   let lookupTimer;
   let toastTimer;
@@ -95,6 +112,7 @@ export function renderOrderForm(el) {
     mapEl: el.querySelector('#order-map'),
     statusEl,
     warningEl: el.querySelector('#area-warning'),
+    initialPin: saved?.pin ?? null,
     onPin: (p) => {
       pin = p;
       clearTimeout(lookupTimer);
@@ -133,9 +151,43 @@ export function renderOrderForm(el) {
   }
 
   const storeInput = form.elements.store;
+  const feeEl = el.querySelector('#store-fee');
+  const updateFee = () => { feeEl.textContent = deliveryFeeHint(storeInput.value); };
   attachStoreCombobox(storeInput, el.querySelector('#store-listbox'), {
     load: () => loadDirectory(),
-    onPick: () => setError('store', ''),
+    onPick: () => { setError('store', ''); updateFee(); },
+  });
+  storeInput.addEventListener('input', updateFee);
+  updateFee();
+
+  // Cash on delivery: "how much will you pay with?"
+  const changeField = el.querySelector('#field-changeFor');
+  const changeInput = form.elements.changeFor;
+  form.addEventListener('change', (e) => {
+    if (e.target.name === 'payment') changeField.hidden = e.target.value !== 'cod';
+  });
+  changeField.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-change]');
+    if (!chip) return;
+    changeInput.value = chip.dataset.change;
+    setError('changeFor', '');
+  });
+
+  // Remember my details on this phone
+  const clearSavedBtn = el.querySelector('[data-action="clear-saved"]');
+  const CONTACT_FIELDS = ['name', 'phone', 'address', 'landmark'];
+  if (saved) {
+    CONTACT_FIELDS.forEach((f) => { form.elements[f].value = saved[f]; });
+    clearSavedBtn.hidden = false;
+  }
+  clearSavedBtn.addEventListener('click', () => {
+    clearDetails();
+    CONTACT_FIELDS.forEach((f) => { form.elements[f].value = ''; setError(f, ''); });
+    pin = null;
+    lastAutofilled = null;
+    orderMap.clearPin();
+    clearSavedBtn.hidden = true;
+    form.elements.name.focus();
   });
 
   form.addEventListener('input', (e) => { if (e.target.name) setError(e.target.name, ''); });
@@ -144,6 +196,7 @@ export function renderOrderForm(el) {
   document.addEventListener(SELECT_STORE_EVENT, (e) => {
     storeInput.value = e.detail.name;
     setError('store', '');
+    updateFee();
     el.scrollIntoView({ behavior: 'smooth' });
     if (e.detail.focus === 'orderList') form.elements.orderList.focus({ preventScroll: true });
   });
@@ -154,7 +207,7 @@ export function renderOrderForm(el) {
     return {
       name: get('name'), phone: get('phone'), address: get('address'), landmark: get('landmark'),
       store: get('store'), orderList: get('orderList'),
-      payment: get('payment'), notes: get('notes'), pin,
+      payment: get('payment'), changeFor: get('changeFor'), notes: get('notes'), pin,
     };
   }
 
@@ -190,6 +243,12 @@ export function renderOrderForm(el) {
     }
 
     const message = buildOrderMessage(data);
+    if (form.elements.remember.checked) {
+      saveDetails(data);
+      clearSavedBtn.hidden = false;
+    } else {
+      clearDetails();
+    }
     if (!(await copyText(message))) {
       openFallback(message);
       return;

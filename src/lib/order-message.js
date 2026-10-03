@@ -1,5 +1,6 @@
 import { paymentLabel } from '../data/payments.js';
-import { normalisePhone } from './validate.js';
+import { normalisePhone, parseChangeFor } from './validate.js';
+import { peso } from './cart.js';
 import { mapsLink } from './geo.js';
 
 export function buildOrderMessage(data) {
@@ -16,6 +17,9 @@ export function buildOrderMessage(data) {
     `Order List: ${data.orderList.trim()}`,
     `Payment: ${paymentLabel(data.payment)}`,
   );
+  const change = data.payment === 'cod' ? parseChangeFor(data.changeFor) : null;
+  if (change === 'exact') lines.push('Change for: Exact amount (no change needed)');
+  else if (Number.isFinite(change)) lines.push(`Change for: ${peso(change).replace(' ', '')}`);
   const notes = (data.notes ?? '').trim();
   if (notes) lines.push(`Notes: ${notes}`);
   return lines.join('\n');

@@ -146,3 +146,16 @@ html.is-locked { overflow: hidden; }
 .combo__option[aria-selected="true"], .combo__option:hover { background: var(--yellow-soft); }
 .combo__option--typed { color: var(--brand-red); font-weight: 700; }
 .combo__town { color: var(--ink-muted); font-weight: 400; }
+
+/* Cash change, remember me, privacy */
+.change__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.change__chip { min-height: 40px; padding: 6px 14px; border: 1.5px solid #D9D9D9; border-radius: var(--radius-pill); background: var(--surface); font-weight: 600; cursor: pointer; }
+.change__chip:hover { border-color: var(--ink); }
+.remember { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.remember__label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; cursor: pointer; }
+.remember__label input { width: 20px; height: 20px; accent-color: var(--brand-red); }
+.remember__clear { border: 0; background: none; padding: 8px 0; color: var(--brand-red); font-weight: 700; text-decoration: underline; cursor: pointer; }
+.remember__clear[hidden] { display: none; }
+.privacy { grid-column: 1 / -1; color: #CFCFCF; font-size: .85rem; }
+.privacy summary { cursor: pointer; color: var(--brand-yellow); font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.privacy p { margin: 0 0 8px; max-width: 70ch; }

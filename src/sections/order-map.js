@@ -1,6 +1,6 @@
 import { SARIAYA_CENTER, isInsideSariaya } from '../lib/geo.js';
 
-export function createOrderMap({ mapEl, statusEl, warningEl, onPin }) {
+export function createOrderMap({ mapEl, statusEl, warningEl, onPin, initialPin = null }) {
   let L;
   let map;
   let marker;
@@ -27,6 +27,12 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin }) {
         }
       });
       map.on('click', (e) => setPin(e.latlng.lat, e.latlng.lng));
+      if (initialPin) {
+        placeMarker(initialPin.lat, initialPin.lng); // a remembered pin: show it, no new address lookup
+        map.setView([initialPin.lat, initialPin.lng], 17);
+        warningEl.hidden = isInsideSariaya(initialPin.lat, initialPin.lng);
+        statusEl.textContent = 'Using your saved pin. Drag it or tap the map if you’re somewhere else today.';
+      }
     })();
     return ready;
   }
@@ -37,8 +43,7 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin }) {
     onPin({ lat, lng });
   }
 
-  async function setPin(lat, lng, { pan = false } = {}) {
-    await ensure();
+  function placeMarker(lat, lng) {
     if (!marker) {
       marker = L.marker([lat, lng], {
         draggable: true,
@@ -53,8 +58,21 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin }) {
     } else {
       marker.setLatLng([lat, lng]);
     }
+  }
+
+  async function setPin(lat, lng, { pan = false } = {}) {
+    await ensure();
+    placeMarker(lat, lng);
     if (pan) map.setView([lat, lng], 17);
     update(lat, lng);
+  }
+
+  function clearPin() {
+    initialPin = null;
+    marker?.remove();
+    marker = null;
+    warningEl.hidden = true;
+    statusEl.textContent = 'Tap the map to drop a pin. You can drag it to your exact gate.';
   }
 
   function locate() {
@@ -73,5 +91,5 @@ export function createOrderMap({ mapEl, statusEl, warningEl, onPin }) {
     );
   }
 
-  return { ensure, setPin, locate };
+  return { ensure, setPin, clearPin, locate };
 }

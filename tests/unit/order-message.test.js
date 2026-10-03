@@ -42,4 +42,13 @@ describe('buildOrderMessage', () => {
     expect(msg).toContain('Store/s: Aling Nena Bakery');
     expect(msg).toContain('Payment: Credit/Debit Card');
   });
+
+  it('adds the change amount for cash on delivery only', () => {
+    expect(buildOrderMessage({ ...BASE, payment: 'cod', changeFor: '₱1,000' }))
+      .toMatch(/\nPayment: Cash on Delivery\nChange for: ₱1,000$/);
+    expect(buildOrderMessage({ ...BASE, payment: 'cod', changeFor: 'Exact amount' }))
+      .toContain('Change for: Exact amount (no change needed)');
+    expect(buildOrderMessage({ ...BASE, payment: 'cod', changeFor: '' })).not.toContain('Change for');
+    expect(buildOrderMessage({ ...BASE, payment: 'gcash', changeFor: '500' })).not.toContain('Change for');
+  });
 });

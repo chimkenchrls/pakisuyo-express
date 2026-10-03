@@ -11,8 +11,21 @@ npm install
 npm run dev          # local dev server
 npm test             # unit tests (Vitest)
 npm run test:e2e     # end-to-end tests (Playwright, phone viewport)
-npm run build        # production build in dist/
+npm run build        # public (launch) build in dist/
 ```
+
+## Pitch vs launch builds
+
+One codebase, two builds:
+
+| | Pitch (show the owner) | Launch (public site) |
+|---|---|---|
+| Commands | `npm run dev:pitch` / `npm run build:pitch` | `npm run dev` / `npm run build` |
+| Jollibee, McDonald's, Dunkin' logos + Jollibee food photos | shown | replaced by initials / emoji tiles, files not shipped |
+| Search engines | blocked (`noindex`) | allowed |
+
+The switch lives in `.env.pitch` (`VITE_PITCH=true`); the protected images are listed in `src/lib/brand-assets.js`.
+Wings & Dims and Dash Espresso logos appear in both — get those stores' OK before launch.
 
 ## Editing content
 
@@ -39,6 +52,13 @@ npm run fetch:stores               # all food & drink places in Sariaya + Lucena
 npm run fetch:images     # logos/photos from Wikimedia Commons
 npm run export:logos     # logo PNGs incl. 1080×1080 Facebook profile picture
 ```
+
+## Connecting a domain (e.g. pakisuyoexpress.com)
+
+1. Buy the domain (any registrar; `.com` ≈ ₱700–1,000/year).
+2. Netlify → the site → **Domain management → Add a domain** → enter it.
+3. At the registrar, either switch the nameservers to the ones Netlify shows (easiest), or add the `A`/`CNAME` records it lists.
+4. Wait for DNS (minutes to a few hours); Netlify issues the free HTTPS certificate automatically — HTTPS is required for "Use my current location".
 
 ## Deploying
 

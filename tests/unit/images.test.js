@@ -4,6 +4,7 @@ vi.mock('../../src/data/images.json', () => ({
   default: { stores: { 'jollibee-sariaya': '/assets/stores/jollibee-sariaya/logo.png' }, items: { yumburger: '/assets/y.png' } },
 }));
 
+vi.stubEnv('VITE_PITCH', 'true'); // these tests exercise the pitch build's brand logos
 const { initialsTile, storeImageHtml, itemImageHtml, categoryTile } = await import('../../src/lib/images.js');
 const { getStore } = await import('../../src/data/stores.js');
 
@@ -37,5 +38,18 @@ describe('images', () => {
     const [chickenjoy, , yumburger] = getStore('jollibee-sariaya').menu;
     expect(itemImageHtml(yumburger, 'i')).toContain('src="/assets/y.png"');
     expect(itemImageHtml(chickenjoy, 'i')).toContain('🍗');
+  });
+});
+
+describe('images in the public (launch) build', () => {
+  it('replaces third-party brand logos with initials', async () => {
+    vi.resetModules();
+    vi.stubEnv('VITE_PITCH', '');
+    const launch = await import('../../src/lib/images.js');
+    const { getStore } = await import('../../src/data/stores.js');
+    const html = launch.storeImageHtml(getStore('jollibee-sariaya'), 'logo');
+    expect(html).not.toContain('<img');
+    expect(html).toContain('>JB<');
+    vi.unstubAllEnvs();
   });
 });

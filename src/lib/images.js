@@ -1,6 +1,10 @@
-import manifest from '../data/images.json';
+import rawManifest from '../data/images.json';
 import { escapeHtml } from './html.js';
 import { categoryById } from '../data/categories.js';
+import { visibleManifest } from './brand-assets.js';
+
+// `npm run build:pitch` / `dev:pitch` set VITE_PITCH=true; the public build leaves third-party brand images out.
+const manifest = visibleManifest(rawManifest, { pitch: import.meta.env.VITE_PITCH === 'true' });
 
 export function initialsTile(store, cls) {
   return `<span class="${cls} tile" style="background:${store.color};color:${store.textColor}" aria-hidden="true">${escapeHtml(store.initials)}</span>`;
