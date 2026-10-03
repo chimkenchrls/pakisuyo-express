@@ -1,4 +1,3 @@
-import { STORES } from '../data/stores.js';
 import { PAYMENT_METHODS } from '../data/payments.js';
 import { MESSENGER_URL, SELECT_STORE_EVENT } from '../data/contact.js';
 import { validateOrder, FIELD_ORDER } from '../lib/validate.js';
@@ -6,8 +5,9 @@ import { buildOrderMessage } from '../lib/order-message.js';
 import { copyText, copyFromTextarea } from '../lib/clipboard.js';
 import { reverseGeocode, addressAfterLookup } from '../lib/geo.js';
 import { latestOnly } from '../lib/async.js';
-import { escapeHtml } from '../lib/html.js';
+import { loadDirectory } from '../lib/directory-data.js';
 import { createOrderMap } from './order-map.js';
+import { attachStoreCombobox } from './store-combobox.js';
 
 const field = (name, label, control, { required = true, hidden = false } = {}) => `
   <div class="field${required ? ' field--required' : ''}" id="field-${name}"${hidden ? ' hidden' : ''}>
@@ -39,13 +39,14 @@ function markup() {
         </fieldset>
         ${field('address', 'Exact Address', control('input', 'address', 'autocomplete="street-address"'))}
         ${field('landmark', 'Landmark', control('input', 'landmark', 'placeholder="e.g. Blue gate beside the chapel"'))}
-        ${field('storeId', 'Store/s', `
-          <select id="f-storeId" name="storeId" aria-describedby="err-storeId">
-            <option value="">Choose a store</option>
-            ${STORES.map((s) => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}
-            <option value="other">Other (type it in)</option>
-          </select>`)}
-        ${field('storeOther', 'Store name', control('input', 'storeOther', 'placeholder="e.g. Aling Nena Bakery"'), { hidden: true })}
+        <div class="field field--required combo" id="field-store">
+          <label for="f-store">Store/s</label>
+          <input id="f-store" name="store" role="combobox" aria-autocomplete="list" aria-expanded="false"
+            aria-controls="store-listbox" aria-describedby="err-store" autocomplete="off"
+            placeholder="Type a store, e.g. Jollibee or Lugaw Queen">
+          <ul id="store-listbox" class="combo__list" role="listbox" aria-label="Store suggestions" hidden></ul>
+          <p class="field-error" id="err-store"></p>
+        </div>
         ${field('orderList', 'Order List', control('textarea', 'orderList', 'rows="4" placeholder="e.g. 1 Chickenjoy bucket, 2 Coke Float"'))}
         <fieldset class="field field--required" id="field-payment" aria-describedby="err-payment">
           <legend>Payment method</legend>
@@ -79,8 +80,6 @@ export function renderOrderForm(el) {
 
   const form = el.querySelector('form');
   const addressEl = form.elements.address;
-  const storeSelect = form.elements.storeId;
-  const storeOtherField = el.querySelector('#field-storeOther');
   const statusEl = el.querySelector('#map-status');
   const toast = el.querySelector('.toast');
   const dialog = el.querySelector('dialog');
@@ -133,17 +132,20 @@ export function renderOrderForm(el) {
     });
   }
 
-  const syncStoreOther = () => { storeOtherField.hidden = storeSelect.value !== 'other'; };
-  storeSelect.addEventListener('change', syncStoreOther);
+  const storeInput = form.elements.store;
+  attachStoreCombobox(storeInput, el.querySelector('#store-listbox'), {
+    load: () => loadDirectory(),
+    onPick: () => setError('store', ''),
+  });
 
   form.addEventListener('input', (e) => { if (e.target.name) setError(e.target.name, ''); });
   form.addEventListener('change', (e) => { if (e.target.name) setError(e.target.name, ''); });
 
   document.addEventListener(SELECT_STORE_EVENT, (e) => {
-    storeSelect.value = e.detail.storeId;
-    syncStoreOther();
-    setError('storeId', '');
+    storeInput.value = e.detail.name;
+    setError('store', '');
     el.scrollIntoView({ behavior: 'smooth' });
+    if (e.detail.focus === 'orderList') form.elements.orderList.focus({ preventScroll: true });
   });
 
   function readForm() {
@@ -151,7 +153,7 @@ export function renderOrderForm(el) {
     const get = (key) => String(data.get(key) ?? '');
     return {
       name: get('name'), phone: get('phone'), address: get('address'), landmark: get('landmark'),
-      storeId: get('storeId'), storeOther: get('storeOther'), orderList: get('orderList'),
+      store: get('store'), orderList: get('orderList'),
       payment: get('payment'), notes: get('notes'), pin,
     };
   }

@@ -137,3 +137,12 @@ html.is-locked { overflow: hidden; }
 .store-sheet__more { display: block; width: auto; margin: 14px auto; }
 .store-sheet__more[hidden] { display: none; }
 .store-sheet__foot { margin-top: auto; padding: 14px var(--gutter) 20px; color: var(--ink-muted); font-size: .8rem; }
+
+/* Store combobox */
+.combo { position: relative; }
+.combo__list { position: absolute; left: 0; right: 0; top: calc(100% - 4px); z-index: 20; list-style: none; margin: 0; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .12); max-height: 280px; overflow-y: auto; }
+.combo__list[hidden] { display: none; }
+.combo__option { padding: 10px 12px; border-radius: 8px; cursor: pointer; }
+.combo__option[aria-selected="true"], .combo__option:hover { background: var(--yellow-soft); }
+.combo__option--typed { color: var(--brand-red); font-weight: 700; }
+.combo__town { color: var(--ink-muted); font-weight: 400; }

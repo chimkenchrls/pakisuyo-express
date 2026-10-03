@@ -73,3 +73,62 @@ test('says so when the store list cannot load (Review Focus 3)', async ({ page }
   await page.goto('/#stores');
   await expect(page.getByText("Couldn't load the store list — type any store in the order form.")).toBeVisible();
 });
+
+async function fillRest(page) {
+  await page.getByLabel(/^Name/).fill('Juan Dela Cruz');
+  await page.getByLabel('Contact Number').fill('0917 123 4567');
+  await page.getByLabel('Exact Address').fill('123 Rizal St');
+  await page.getByLabel('Landmark').fill('Blue gate');
+  await page.getByLabel('Order List').fill('2 lugaw');
+  await page.locator('label.chip', { hasText: 'GCash' }).click();
+}
+
+test('store combobox works with the keyboard only (Review Focus 4)', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await context.route('https://m.me/**', (r) => r.fulfill({ contentType: 'text/html', body: 'stub' }));
+  await page.goto('/#order');
+  const combo = page.getByRole('combobox', { name: /Store/ });
+  await combo.pressSequentially('lugaw');
+  await expect(page.getByRole('option', { name: /Lugaw Queen/ })).toBeVisible();
+  await page.keyboard.press('ArrowDown');
+  await expect(combo).toHaveAttribute('aria-activedescendant', /store-opt-0/);
+  await page.keyboard.press('Enter'); // must pick, not submit
+  await expect(combo).toHaveValue('Lugaw Queen');
+  await expect(page.getByRole('listbox')).toBeHidden();
+  await expect(page.locator('#err-name')).toBeEmpty(); // form was not submitted
+
+  await fillRest(page);
+  const popup = context.waitForEvent('page');
+  await page.getByRole('button', { name: 'Send Order' }).click();
+  await popup;
+  await page.bringToFront();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen');
+});
+
+test('an unlisted store can be used as typed, and Esc closes the list', async ({ page }) => {
+  await page.goto('/#order');
+  const combo = page.getByRole('combobox', { name: /Store/ });
+  await combo.fill('Aling Nena Bakery');
+  await page.getByRole('option', { name: 'Use “Aling Nena Bakery” as typed' }).click();
+  await expect(combo).toHaveValue('Aling Nena Bakery');
+  await combo.press('End');
+  await combo.pressSequentially('s');
+  await expect(page.getByRole('listbox')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('listbox')).toBeHidden();
+});
+
+test('the form still sends a typed store when the list fails to load (Review Focus 3)', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await context.route('https://m.me/**', (r) => r.fulfill({ contentType: 'text/html', body: 'stub' }));
+  await page.unroute('**/data/directory.json');
+  await page.route('**/data/directory.json', (r) => r.abort());
+  await page.goto('/#order');
+  await page.getByRole('combobox', { name: /Store/ }).fill('Lugaw Queen');
+  await fillRest(page);
+  const popup = context.waitForEvent('page');
+  await page.getByRole('button', { name: 'Send Order' }).click();
+  await popup;
+  await page.bringToFront();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Store/s: Lugaw Queen');
+});

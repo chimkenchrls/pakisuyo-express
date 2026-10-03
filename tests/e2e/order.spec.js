@@ -4,6 +4,7 @@ const PNG_1PX = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0l
 const LUCENA = { latitude: 13.9311, longitude: 121.6173 };
 
 test.beforeEach(async ({ context }) => {
+  await context.route('**/data/directory.json', (r) => r.fulfill({ contentType: 'application/json', body: '{"meta":{},"stores":[]}' }));
   await context.route('https://m.me/**', (r) => r.fulfill({ contentType: 'text/html', body: '<title>Messenger stub</title>' }));
   await context.route('https://tile.openstreetmap.org/**', (r) => r.fulfill({ contentType: 'image/png', body: PNG_1PX }));
   await context.route('https://nominatim.openstreetmap.org/**', (r) =>
@@ -15,7 +16,7 @@ async function fillValidOrder(page) {
   await page.getByLabel('Contact Number').fill('+63 917-123-4567');
   await page.getByLabel('Exact Address').fill('123 Rizal St, Poblacion');
   await page.getByLabel('Landmark').fill('Blue gate beside the chapel');
-  await page.getByLabel('Store/s').selectOption('jollibee-sariaya');
+  await page.getByRole('combobox', { name: /Store/ }).fill('Jollibee Sariaya');
   await page.getByLabel('Order List').fill('1 Chickenjoy bucket');
   await page.locator('label.chip', { hasText: 'GCash' }).click();
 }
@@ -68,16 +69,10 @@ test('falls back to a copy dialog when the clipboard is blocked', async ({ page 
   await expect(dialog.getByRole('link', { name: 'Open Messenger' })).toHaveAttribute('href', 'https://m.me/PakisuyoExpressSariaya');
 });
 
-test('tapping a restaurant card preselects the store', async ({ page }) => {
+test('tapping a featured card fills the store', async ({ page }) => {
   await page.goto('/');
   await page.locator('#restaurants .store-card', { hasText: "Dunkin' Sariaya" }).click();
-  await expect(page.getByLabel('Store/s')).toHaveValue('dunkin-sariaya');
-});
-
-test('"Other" store asks for a typed store name', async ({ page }) => {
-  await page.goto('/#order');
-  await page.getByLabel('Store/s').selectOption('other');
-  await expect(page.getByLabel('Store name')).toBeVisible();
+  await expect(page.getByRole('combobox', { name: /Store/ })).toHaveValue("Dunkin' Sariaya");
 });
 
 test.describe('location', () => {
