@@ -51,7 +51,7 @@ test('a returning customer finds their details filled in, and can clear them', a
 
   await page.reload();
   await expect(page.getByLabel(/^Name/)).toHaveValue('Juan Dela Cruz');
-  await expect(page.getByLabel('Contact Number')).toHaveValue('0917 123 4567');
+  await expect(page.getByLabel('Contact Number')).toHaveValue('09171234567');
   await expect(page.getByLabel('Exact Address')).toHaveValue('123 Rizal St, Poblacion');
   await expect(page.getByLabel('Landmark')).toHaveValue('Blue gate');
   await expect(store(page)).toHaveValue(''); // per-order fields are never remembered
@@ -128,4 +128,50 @@ test('privacy is explained next to Send Order and in the footer', async ({ page 
   await expect(page.getByText("Your details are only used for this delivery.")).toBeVisible();
   await page.getByText('Privacy', { exact: true }).click();
   await expect(page.locator('.privacy')).toContainText('OpenStreetMap');
+});
+
+test.describe('contact number', () => {
+  const phone = (page) => page.getByLabel('Contact Number');
+
+  test('keeps digits only, max 11, and turns a pasted +63 number into 09…', async ({ page }) => {
+    await page.goto('/#order');
+    await expect(phone(page)).toHaveAttribute('inputmode', 'numeric');
+    await phone(page).pressSequentially('0917-123-4567');
+    await expect(phone(page)).toHaveValue('09171234567');
+    await phone(page).pressSequentially('8');
+    await expect(phone(page)).toHaveValue('09171234567');
+    await phone(page).fill('+63 917 123 4567');
+    await expect(phone(page)).toHaveValue('09171234567');
+  });
+
+  test('says "Invalid number" when leaving a wrong number, and clears it once fixed', async ({ page }) => {
+    await page.goto('/#order');
+    await phone(page).fill('0817123');
+    await page.getByLabel('Exact Address').focus();
+    await expect(page.locator('#err-phone')).toHaveText('Invalid number');
+    await phone(page).fill('09171234567');
+    await page.getByLabel('Exact Address').focus();
+    await expect(page.locator('#err-phone')).toBeEmpty();
+  });
+
+  test('rejects an obvious fake on Send', async ({ page }) => {
+    await page.goto('/#order');
+    await fillOrder(page);
+    await phone(page).fill('09000000000');
+    await page.getByRole('button', { name: 'Send Order' }).click();
+    await expect(page.locator('#err-phone')).toHaveText('Invalid number');
+    await expect(phone(page)).toBeFocused();
+  });
+});
+
+test('other fields reject junk and cap their length', async ({ page }) => {
+  await page.goto('/#order');
+  await expect(page.getByLabel(/^Name/)).toHaveAttribute('maxlength', '60');
+  await expect(page.getByLabel('Order List')).toHaveAttribute('maxlength', '500');
+  await fillOrder(page);
+  await page.getByLabel(/^Name/).fill('J');
+  await page.getByLabel('Exact Address').fill('Pob');
+  await page.getByRole('button', { name: 'Send Order' }).click();
+  await expect(page.locator('#err-name')).toHaveText('Please enter a real name (letters only).');
+  await expect(page.locator('#err-address')).toHaveText('Please add more detail to your address.');
 });

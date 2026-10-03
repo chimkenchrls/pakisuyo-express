@@ -1,6 +1,6 @@
 import { PAYMENT_METHODS } from '../data/payments.js';
 import { MESSENGER_URL, SELECT_STORE_EVENT } from '../data/contact.js';
-import { validateOrder, FIELD_ORDER } from '../lib/validate.js';
+import { validateOrder, FIELD_ORDER, LIMITS, sanitisePhoneInput } from '../lib/validate.js';
 import { buildOrderMessage } from '../lib/order-message.js';
 import { copyText, copyFromTextarea } from '../lib/clipboard.js';
 import { reverseGeocode, addressAfterLookup } from '../lib/geo.js';
@@ -18,9 +18,10 @@ const field = (name, label, control, { required = true, hidden = false } = {}) =
     <p class="field-error" id="err-${name}"></p>
   </div>`;
 
+const maxlength = (name) => (LIMITS[name] ? ` maxlength="${LIMITS[name]}"` : '');
 const control = (tag, name, attrs = '') => (tag === 'textarea'
-  ? `<textarea id="f-${name}" name="${name}" aria-describedby="err-${name}" ${attrs}></textarea>`
-  : `<input id="f-${name}" name="${name}" aria-describedby="err-${name}" ${attrs}>`);
+  ? `<textarea id="f-${name}" name="${name}" aria-describedby="err-${name}"${maxlength(name)} ${attrs}></textarea>`
+  : `<input id="f-${name}" name="${name}" aria-describedby="err-${name}"${maxlength(name)} ${attrs}>`);
 
 function markup() {
   return `
@@ -31,7 +32,13 @@ function markup() {
       </div>
       <form class="order-form" novalidate>
         ${field('name', 'Name', control('input', 'name', 'autocomplete="name"'))}
-        ${field('phone', 'Contact Number', control('input', 'phone', 'type="tel" inputmode="tel" autocomplete="tel" placeholder="0917 123 4567"'))}
+        <div class="field field--required" id="field-phone">
+          <label for="f-phone">Contact Number</label>
+          <input id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel"
+            placeholder="09171234567" aria-describedby="hint-phone err-phone">
+          <p class="hint" id="hint-phone">11 digits starting with 09, e.g. 09171234567</p>
+          <p class="field-error" id="err-phone"></p>
+        </div>
         <fieldset class="field field--map">
           <legend>Delivery location</legend>
           <button type="button" class="btn btn--ghost" data-action="locate">📍 Use my current location</button>
@@ -43,7 +50,7 @@ function markup() {
         ${field('landmark', 'Landmark', control('input', 'landmark', 'placeholder="e.g. Blue gate beside the chapel"'))}
         <div class="field field--required combo" id="field-store">
           <label for="f-store">Store/s</label>
-          <input id="f-store" name="store" role="combobox" aria-autocomplete="list" aria-expanded="false"
+          <input id="f-store" name="store" maxlength="${LIMITS.store}" role="combobox" aria-autocomplete="list" aria-expanded="false"
             aria-controls="store-listbox" aria-describedby="err-store" autocomplete="off"
             placeholder="Type a store, e.g. Jollibee or Lugaw Queen">
           <ul id="store-listbox" class="combo__list" role="listbox" aria-label="Store suggestions" hidden></ul>
@@ -64,7 +71,7 @@ function markup() {
           <div class="change__chips">
             ${['Exact amount', '₱500', '₱1,000'].map((v) => `<button type="button" class="change__chip" data-change="${v}">${v}</button>`).join('')}
           </div>
-          <input id="f-changeFor" name="changeFor" inputmode="numeric" placeholder="e.g. 1000" aria-describedby="err-changeFor" autocomplete="off">
+          <input id="f-changeFor" name="changeFor" maxlength="${LIMITS.changeFor}" inputmode="numeric" placeholder="e.g. 1000" aria-describedby="err-changeFor" autocomplete="off">
           <p class="field-error" id="err-changeFor"></p>
         </div>
         ${field('notes', 'Notes (optional)', control('textarea', 'notes', 'rows="2" placeholder="e.g. Call when outside"'), { required: false })}
@@ -160,6 +167,18 @@ export function renderOrderForm(el) {
   storeInput.addEventListener('input', updateFee);
   updateFee();
 
+  // Contact number: digits only (max 11), pasted +63 numbers become 09…, checked when leaving the field.
+  // No maxlength attribute: the browser would cut a pasted "+63 917 123 4567" before we can convert it.
+  const phoneInput = form.elements.phone;
+  phoneInput.addEventListener('input', () => {
+    const clean = sanitisePhoneInput(phoneInput.value);
+    if (clean !== phoneInput.value) phoneInput.value = clean;
+  });
+  phoneInput.addEventListener('blur', () => {
+    if (!phoneInput.value) return;
+    setError('phone', validateOrder({ phone: phoneInput.value }).errors.phone ?? '');
+  });
+
   // Cash on delivery: "how much will you pay with?"
   const changeField = el.querySelector('#field-changeFor');
   const changeInput = form.elements.changeFor;
@@ -178,6 +197,7 @@ export function renderOrderForm(el) {
   const CONTACT_FIELDS = ['name', 'phone', 'address', 'landmark'];
   if (saved) {
     CONTACT_FIELDS.forEach((f) => { form.elements[f].value = saved[f]; });
+    phoneInput.value = sanitisePhoneInput(saved.phone);
     clearSavedBtn.hidden = false;
   }
   clearSavedBtn.addEventListener('click', () => {
