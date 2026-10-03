@@ -9,6 +9,7 @@ export function renderFooter(el) {
       <div>
         <p>Always ready for your Pakisuyo! · Est. 2022</p>
         <p>Open daily 8AM–7PM · Sariaya, Quezon</p>
+        <p>Portfolio demo, made with permission. Not an official channel of Pakisuyo Express.</p>
       </div>
       <p>
         <a href="${MESSENGER_URL}" target="_blank" rel="noopener">Messenger</a> ·
